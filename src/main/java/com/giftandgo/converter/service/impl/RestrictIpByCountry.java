@@ -12,10 +12,8 @@ import static com.giftandgo.converter.util.Constants.RESTRICTED_COUNTRIES;
 public class RestrictIpByCountry implements IpRestrictable {
 
     @Override
-    public void runRestrictionRule(IpDetails ipDetails) {
-        if (RESTRICTED_COUNTRIES.contains(ipDetails.country())) {
-            throw new ConverterRuntimeException(ErrorCode.RESTRICTED_COUNTRY);
-        }
+    public boolean isIpBlocked(IpDetails ipDetails) {
+        return RESTRICTED_COUNTRIES.contains(ipDetails.country());
     }
 
 }

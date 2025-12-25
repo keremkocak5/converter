@@ -38,22 +38,20 @@ public class ConversionLog {
     private Integer httpResponseCode;
 
     @Column(name = "TIME_LAPSED")
-    private Integer timeLapsed;
+    private Long timeLapsed;
 
     public ConversionLog(String uri, String ip) {
         this.uri = uri;
         this.ip = ip;
     }
 
-    public ConversionLog postProcess(Integer timeLapsed, String isp, String countryCode, Integer httpResponseCode) {
-        this.timeLapsed = timeLapsed;
+    public ConversionLog setIpDetails(String isp, String countryCode) {
         this.isp = isp;
         this.countryCode = countryCode;
-        this.httpResponseCode = httpResponseCode;
         return this;
     }
 
-    public ConversionLog postProcess(Integer timeLapsed, Integer httpResponseCode) {
+    public ConversionLog setResults(Long timeLapsed, Integer httpResponseCode) {
         this.timeLapsed = timeLapsed;
         this.httpResponseCode = httpResponseCode;
         return this;

@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -19,7 +21,7 @@ class IpApiClient implements IpTraceable {
     private final String SUCCESS = "success";
 
     @Override
-    public IpDetails getIpDetails(String ip) {
+    public Optional<IpDetails> getIpDetails(String ip) {
         try {
             IpApiResponse ipApiResponse = ipApiRestClient
                     .get()
@@ -28,9 +30,9 @@ class IpApiClient implements IpTraceable {
                     .body(IpApiResponse.class);
             if (!SUCCESS.equalsIgnoreCase(ipApiResponse.status())) {
                 log.error("IpApiClient failed for ip {} and error {}.", ip, ipApiResponse.message());
-                throw new ConverterRuntimeException(ErrorCode.IP_API_RESOLVE_ERROR);
+                return Optional.empty();
             }
-            return new IpDetails(ipApiResponse.country(), ipApiResponse.isp());
+            return Optional.of(new IpDetails(ipApiResponse.country(), ipApiResponse.isp()));
         } catch (Exception e) {
             log.error("IpApiClient failed for ip {}.", ip);
             log.error("IpApiClient failed.", e);

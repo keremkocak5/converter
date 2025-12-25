@@ -30,6 +30,6 @@ public class ConversionLogService implements ConversionLogCRUD {
     @Override
     @Transactional(readOnly = true)
     public List<ConversionLog> findAll() {
-        return conversionLogRepository.findAll(); // performance would be terrible!
+        return conversionLogRepository.findAll(); // this is a NO - NO!!
     }
 }

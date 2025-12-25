@@ -1,5 +1,6 @@
 package com.giftandgo.converter.service.impl;
 
+import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.ConversionLog;
 import com.giftandgo.converter.model.IpDetails;
@@ -18,24 +19,34 @@ import java.util.List;
 public class FileConverterService implements FileConvertable {
 
     private final IpTraceable ipApiClient;
-    private final List<IpRestrictable> ipRestrictionRules;
     private final ConversionLogCRUD conversionLogService;
+    private final List<IpRestrictable> ipRestrictionRules;
 
     @Override
     public String convertFile(String ip) {
+        long startMoment = System.nanoTime();
         ConversionLog conversionLog = conversionLogService.create("uri", ip);
-        IpDetails ipDetails = ipApiClient.getIpDetails("24.48.0.1"); // kerem dikkat
         try {
-            ipRestrictionRules.forEach(ipRestrictionRule -> ipRestrictionRule.runRestrictionRule(ipDetails));
-            conversionLogService.update(conversionLog.postProcess(1, ipDetails.isp(), ipDetails.country(), HttpStatus.OK.value()));
+            runIpValidations(conversionLog);
+            conversionLogService.update(conversionLog.setResults(System.nanoTime() - startMoment, HttpStatus.OK.value()));
+            // do file operations
         } catch (ConverterRuntimeException e) {
-            conversionLogService.update(conversionLog.postProcess(1, ipDetails.isp(), ipDetails.country(), e.getErrorCode().getHttpStatus().value()));
-            throw e;
-        } catch (Exception e) {
-            conversionLogService.update(conversionLog.postProcess(1, HttpStatus.INTERNAL_SERVER_ERROR.value()));
+            conversionLogService.update(conversionLog.setResults(System.nanoTime() - startMoment, e.getErrorCode().getHttpStatus().value()));
             throw e;
         }
         return null;
     }
+
+    private void runIpValidations(ConversionLog conversionLog) {
+        IpDetails ipDetails = ipApiClient.getIpDetails("24.48.0.1").orElseThrow(() -> new ConverterRuntimeException(ErrorCode.IP_API_RESOLVE_ERROR)); // kerem dikkat
+        conversionLogService.update(conversionLog.setIpDetails(ipDetails.isp(), ipDetails.country()));
+        ipRestrictionRules.stream()
+                .filter(rule -> rule.isIpBlocked(ipDetails))
+                .findAny()
+                .ifPresent(rule -> {
+                    throw new ConverterRuntimeException(ErrorCode.RESTRICTED_COUNTRY);
+                });
+    }
+
 
 }
