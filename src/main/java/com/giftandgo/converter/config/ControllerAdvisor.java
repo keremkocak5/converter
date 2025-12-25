@@ -1,6 +1,7 @@
 package com.giftandgo.converter.config;
 
 import com.giftandgo.converter.exception.ConverterRuntimeException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,7 +18,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {Exception.class})
     protected ProblemDetail handleException(Exception e) {
-        return ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), "Internal Server Error");
+        return ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), "Internal Server Error");
     }
 
 }
