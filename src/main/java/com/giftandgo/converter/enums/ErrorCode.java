@@ -8,8 +8,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    RESTRICTED_COUNTRY("I0001", "This country is restricted.", HttpStatus.FORBIDDEN),
-    RESTRICTED_ISP("I0002", "This ISP is restricted.", HttpStatus.FORBIDDEN),
+    RESTRICTED_IP("I0001", "This ip is restricted.", HttpStatus.FORBIDDEN),
     IP_API_CONNECTION_ERROR("I0003", "Could not connect to IP-API.", HttpStatus.INTERNAL_SERVER_ERROR),
     IP_API_RESOLVE_ERROR("I0004", "IP API could not resolve address.", HttpStatus.INTERNAL_SERVER_ERROR),
     INTERNAL_SERVER_ERROR("I0000", "Internal Server Error.", HttpStatus.INTERNAL_SERVER_ERROR);

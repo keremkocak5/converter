@@ -27,24 +27,24 @@ public class FileConverterService implements FileConvertable {
         long startMoment = System.nanoTime();
         ConversionLog conversionLog = conversionLogService.create("uri", ip);
         try {
-            runIpValidations(conversionLog);
+            getIpDetailsAndRunValidationRules(conversionLog);
             conversionLogService.update(conversionLog.setResults(System.nanoTime() - startMoment, HttpStatus.OK.value()));
             // do file operations
         } catch (ConverterRuntimeException e) {
             conversionLogService.update(conversionLog.setResults(System.nanoTime() - startMoment, e.getErrorCode().getHttpStatus().value()));
             throw e;
         }
-        return null;
+        return "Your file is ready.";
     }
 
-    private void runIpValidations(ConversionLog conversionLog) {
+    private void getIpDetailsAndRunValidationRules(ConversionLog conversionLog) {
         IpDetails ipDetails = ipApiClient.getIpDetails("24.48.0.1").orElseThrow(() -> new ConverterRuntimeException(ErrorCode.IP_API_RESOLVE_ERROR)); // kerem dikkat
         conversionLogService.update(conversionLog.setIpDetails(ipDetails.isp(), ipDetails.country()));
         ipRestrictionRules.stream()
                 .filter(rule -> rule.isIpBlocked(ipDetails))
                 .findAny()
                 .ifPresent(rule -> {
-                    throw new ConverterRuntimeException(ErrorCode.RESTRICTED_COUNTRY);
+                    throw new ConverterRuntimeException(ErrorCode.RESTRICTED_IP);
                 });
     }
 
