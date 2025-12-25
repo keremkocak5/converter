@@ -29,12 +29,12 @@ public class FileConverterService implements FileConvertable {
         try {
             getIpDetailsAndRunRestrictionRules(conversionLog);
             // do file operations
-            finalizeConversionLog(startMoment, conversionLog, HttpStatus.OK);
+            finalizeConversionLog(startMoment, conversionLog, HttpStatus.OK); // kerem bu created olsun
         } catch (ConverterRuntimeException e) {
             finalizeConversionLog(startMoment, conversionLog, e.getErrorCode().getHttpStatus());
             throw e;
         }
-        return "Your file is ready.";
+        return "Your file is ready. Filename is kerem";
     }
 
     private void getIpDetailsAndRunRestrictionRules(ConversionLog conversionLog) {
