@@ -29,7 +29,7 @@ class IpApiClient implements IpTraceable {
                     .retrieve()
                     .body(IpApiResponse.class);
             if (!SUCCESS.equalsIgnoreCase(ipApiResponse.status())) {
-                log.error("IpApiClient failed for ip {}, error {}.", ip, ipApiResponse.message());
+                log.info("IpApiClient could not find details for ip {}, error {}.", ip, ipApiResponse.message());
                 return Optional.empty();
             }
             return Optional.of(new IpDetails(ipApiResponse.country(), ipApiResponse.isp()));

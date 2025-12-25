@@ -25,10 +25,10 @@ public class FileConverterService implements FileConvertable {
     @Override
     public String convertFile(String ip) {
         long startMoment = System.nanoTime();
-        ConversionLog conversionLog = conversionLogService.create("uri", ip);
+        ConversionLog conversionLog = saveConversionLog(ip);
         try {
-            getIpDetailsAndRunRestrictionRules(conversionLog);
-            // do file operations
+            saveIpDetailsAndRunRestrictionRules(conversionLog);
+            saveFile();
             saveExecutionResults(startMoment, conversionLog, HttpStatus.OK); // kerem bu created olsun
         } catch (ConverterRuntimeException e) {
             saveExecutionResults(startMoment, conversionLog, e.getErrorCode().getHttpStatus());
@@ -37,7 +37,7 @@ public class FileConverterService implements FileConvertable {
         return "Your file is ready. Filename is kerem";
     }
 
-    private void getIpDetailsAndRunRestrictionRules(ConversionLog conversionLog) {
+    private void saveIpDetailsAndRunRestrictionRules(ConversionLog conversionLog) {
         IpDetails ipDetails = ipApiClient.getIpDetails("24.48.0.1").orElseThrow(() -> new ConverterRuntimeException(ErrorCode.IP_API_RESOLVE_ERROR)); // kerem dikkat
         conversionLogService.update(conversionLog.setIpDetails(ipDetails.isp(), ipDetails.country()));
         ipRestrictionRules.stream()
@@ -46,6 +46,13 @@ public class FileConverterService implements FileConvertable {
                 .ifPresent(rule -> {
                     throw new ConverterRuntimeException(ErrorCode.RESTRICTED_IP);
                 });
+    }
+
+    private ConversionLog saveConversionLog(String ip) {
+        return conversionLogService.create("uri", ip);
+    }
+
+    private void saveFile() {
     }
 
     private void saveExecutionResults(long startMoment, ConversionLog conversionLog, HttpStatus httpStatus) {
