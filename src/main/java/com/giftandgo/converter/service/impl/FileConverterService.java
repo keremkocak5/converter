@@ -27,9 +27,9 @@ public class FileConverterService implements FileConvertable {
         long startMoment = System.nanoTime();
         ConversionLog conversionLog = conversionLogService.create("uri", ip);
         try {
-            getIpDetailsAndRunValidationRules(conversionLog);
-            conversionLogService.update(conversionLog.setResults(System.nanoTime() - startMoment, HttpStatus.OK.value()));
+            getIpDetailsAndRunRestrictionRules(conversionLog);
             // do file operations
+            conversionLogService.update(conversionLog.setResults(System.nanoTime() - startMoment, HttpStatus.OK.value()));
         } catch (ConverterRuntimeException e) {
             conversionLogService.update(conversionLog.setResults(System.nanoTime() - startMoment, e.getErrorCode().getHttpStatus().value()));
             throw e;
@@ -37,16 +37,15 @@ public class FileConverterService implements FileConvertable {
         return "Your file is ready.";
     }
 
-    private void getIpDetailsAndRunValidationRules(ConversionLog conversionLog) {
+    private void getIpDetailsAndRunRestrictionRules(ConversionLog conversionLog) {
         IpDetails ipDetails = ipApiClient.getIpDetails("24.48.0.1").orElseThrow(() -> new ConverterRuntimeException(ErrorCode.IP_API_RESOLVE_ERROR)); // kerem dikkat
         conversionLogService.update(conversionLog.setIpDetails(ipDetails.isp(), ipDetails.country()));
         ipRestrictionRules.stream()
-                .filter(rule -> rule.isIpBlocked(ipDetails))
+                .filter(rule -> rule.isRestricted(ipDetails))
                 .findAny()
                 .ifPresent(rule -> {
                     throw new ConverterRuntimeException(ErrorCode.RESTRICTED_IP);
                 });
     }
-
 
 }

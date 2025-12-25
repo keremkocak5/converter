@@ -1,7 +1,7 @@
 create table CONVERSION_LOG(
 ID INTEGER not null primary key,
 CREATION_DATE TIMESTAMP not null,
-IP VARCHAR(45),
+IP VARCHAR(45) not null,
 URI VARCHAR(30) not null,
 COUNTRY_CODE VARCHAR(3),
 ISP VARCHAR(100),

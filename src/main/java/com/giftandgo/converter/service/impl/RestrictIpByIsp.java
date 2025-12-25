@@ -10,7 +10,7 @@ import static com.giftandgo.converter.util.Constants.RESTRICTED_ISPS;
 public class RestrictIpByIsp implements IpRestrictable {
 
     @Override
-    public boolean isIpBlocked(IpDetails ipDetails) {
+    public boolean isRestricted(IpDetails ipDetails) {
         return RESTRICTED_ISPS.contains(ipDetails.country());
     }
 
