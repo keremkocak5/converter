@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ConversionLogCRUD {
 
-    ConversionLog createNewEntity(String uri);
+    ConversionLog create(String uri, String ip);
 
     ConversionLog update(ConversionLog conversionLog);
 

@@ -22,14 +22,11 @@ public class ConversionLog {
     @CreationTimestamp
     private LocalDateTime creationDate;
 
+    @Column(name = "IP", nullable = false, updatable = false)
+    private String ip;
+
     @Column(name = "URI", nullable = false, updatable = false)
     private String uri;
-
-    @Column(name = "HTTP_RESPONSE_CODE")
-    private Integer httpResponseCode;
-
-    @Column(name = "IP_ADDRESS")
-    private String ipAddress;
 
     @Column(name = "COUNTRY_CODE")
     private String countryCode;
@@ -37,11 +34,29 @@ public class ConversionLog {
     @Column(name = "ISP")
     private String isp;
 
+    @Column(name = "HTTP_RESPONSE_CODE")
+    private Integer httpResponseCode;
+
     @Column(name = "TIME_LAPSED")
     private Integer timeLapsed;
 
-    public ConversionLog(String uri) {
+    public ConversionLog(String uri, String ip) {
         this.uri = uri;
+        this.ip = ip;
+    }
+
+    public ConversionLog postProcess(Integer timeLapsed, String isp, String countryCode, Integer httpResponseCode) {
+        this.timeLapsed = timeLapsed;
+        this.isp = isp;
+        this.countryCode = countryCode;
+        this.httpResponseCode = httpResponseCode;
+        return this;
+    }
+
+    public ConversionLog postProcess(Integer timeLapsed, Integer httpResponseCode) {
+        this.timeLapsed = timeLapsed;
+        this.httpResponseCode = httpResponseCode;
+        return this;
     }
 
 }

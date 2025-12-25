@@ -1,24 +1,25 @@
 package com.giftandgo.converter.controller.v1;
 
 import com.giftandgo.converter.service.impl.FileConverterService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/file")
+@RequestMapping("/v1/log")
 @RequiredArgsConstructor
-public class FileConverterController {
+public class ConversionLogController {
 
     private final FileConverterService fileConverterService;
 
-    @PostMapping
-    @Operation(summary = "Convert a file and get output filename")
-    public String convertFile(HttpServletRequest request) {
-        return fileConverterService.convertFile(request.getRemoteAddr());
+    @GetMapping
+    @Operation(summary = "Get all conversion logs")
+    public String getConversionLog() {
+        return fileConverterService.convertFile("request.getRemoteAddr()");
     }
 
 }

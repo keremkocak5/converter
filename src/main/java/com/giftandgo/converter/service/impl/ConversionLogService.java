@@ -16,13 +16,13 @@ public class ConversionLogService implements ConversionLogCRUD {
     private final ConversionLogRepository conversionLogRepository;
 
     @Override
-    @Transactional
-    public ConversionLog createNewEntity(String uri) {
-        return conversionLogRepository.save(new ConversionLog(uri));
+    @Transactional(noRollbackFor = Exception.class)
+    public ConversionLog create(String uri, String ip) {
+        return conversionLogRepository.save(new ConversionLog(uri, ip));
     }
 
     @Override
-    @Transactional
+    @Transactional(noRollbackFor = Exception.class)
     public ConversionLog update(ConversionLog conversionLog) {
         return conversionLogRepository.save(conversionLog);
     }
