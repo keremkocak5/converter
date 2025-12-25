@@ -1,6 +1,6 @@
 package com.giftandgo.converter.controller.v1;
 
-import com.giftandgo.converter.service.impl.FileConverterService;
+import com.giftandgo.converter.service.FileConvertable;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class FileConverterController {
 
-    private final FileConverterService fileConverterService;
+    private final FileConvertable fileConverterService;
 
     @PostMapping
     @Operation(summary = "Convert a file and get output filename")
