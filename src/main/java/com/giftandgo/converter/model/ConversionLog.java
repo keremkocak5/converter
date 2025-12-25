@@ -51,7 +51,7 @@ public class ConversionLog {
         return this;
     }
 
-    public ConversionLog setResults(Long timeLapsed, Integer httpResponseCode) {
+    public ConversionLog setExecutionResults(Long timeLapsed, Integer httpResponseCode) {
         this.timeLapsed = timeLapsed;
         this.httpResponseCode = httpResponseCode;
         return this;
