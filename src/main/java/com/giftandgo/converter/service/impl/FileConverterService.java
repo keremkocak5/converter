@@ -29,9 +29,9 @@ public class FileConverterService implements FileConvertable {
         try {
             getIpDetailsAndRunRestrictionRules(conversionLog);
             // do file operations
-            conversionLogService.update(conversionLog.setResults(System.nanoTime() - startMoment, HttpStatus.OK.value()));
+            finalizeConversionLog(startMoment, conversionLog, HttpStatus.OK);
         } catch (ConverterRuntimeException e) {
-            conversionLogService.update(conversionLog.setResults(System.nanoTime() - startMoment, e.getErrorCode().getHttpStatus().value()));
+            finalizeConversionLog(startMoment, conversionLog, e.getErrorCode().getHttpStatus());
             throw e;
         }
         return "Your file is ready.";
@@ -46,6 +46,10 @@ public class FileConverterService implements FileConvertable {
                 .ifPresent(rule -> {
                     throw new ConverterRuntimeException(ErrorCode.RESTRICTED_IP);
                 });
+    }
+
+    private void finalizeConversionLog(long startMoment, ConversionLog conversionLog, HttpStatus httpStatus) {
+        conversionLogService.update(conversionLog.setResults(System.nanoTime() - startMoment, httpStatus.value()));
     }
 
 }
