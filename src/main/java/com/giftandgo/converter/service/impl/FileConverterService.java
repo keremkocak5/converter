@@ -29,9 +29,9 @@ public class FileConverterService implements FileConvertable {
         try {
             getIpDetailsAndRunRestrictionRules(conversionLog);
             // do file operations
-            setExecutionResults(startMoment, conversionLog, HttpStatus.OK); // kerem bu created olsun
+            saveExecutionResults(startMoment, conversionLog, HttpStatus.OK); // kerem bu created olsun
         } catch (ConverterRuntimeException e) {
-            setExecutionResults(startMoment, conversionLog, e.getErrorCode().getHttpStatus());
+            saveExecutionResults(startMoment, conversionLog, e.getErrorCode().getHttpStatus());
             throw e;
         }
         return "Your file is ready. Filename is kerem";
@@ -48,7 +48,7 @@ public class FileConverterService implements FileConvertable {
                 });
     }
 
-    private void setExecutionResults(long startMoment, ConversionLog conversionLog, HttpStatus httpStatus) {
+    private void saveExecutionResults(long startMoment, ConversionLog conversionLog, HttpStatus httpStatus) {
         conversionLogService.update(conversionLog.setExecutionResults(System.nanoTime() - startMoment, httpStatus.value()));
     }
 
