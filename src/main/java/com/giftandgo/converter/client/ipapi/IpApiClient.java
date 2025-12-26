@@ -17,7 +17,7 @@ import java.util.Optional;
 class IpApiClient implements IpTraceable {
 
     private final RestClient ipApiRestClient;
-    private final String URI = "/json/{ip}?fields=status,country,isp,message";
+    private final String URI = "/json/{ip}?fields=status,countryCode,isp,message";
     private final String SUCCESS = "success";
 
     @Override
@@ -32,7 +32,7 @@ class IpApiClient implements IpTraceable {
                 log.info("IpApiClient could not find details for ip {}, error {}.", ip, ipApiResponse.message());
                 return Optional.empty();
             }
-            return Optional.of(new IpDetails(ipApiResponse.country(), ipApiResponse.isp()));
+            return Optional.of(new IpDetails(ipApiResponse.countryCode(), ipApiResponse.isp()));
         } catch (Exception e) {
             log.error("IpApiClient failed for ip {}.", ip);
             log.error("IpApiClient failed.", e);

@@ -45,7 +45,7 @@ public class FileConverterService implements FileConvertable {
         IpDetails ipDetails = ipApiClient
                 .getIpDetails("24.48.0.1")
                 .orElseThrow(() -> new ConverterRuntimeException(ErrorCode.IP_API_RESOLVE_ERROR)); // kerem dikkat
-        conversionLogService.update(conversionLog.setIpDetails(ipDetails.isp(), ipDetails.country()));
+        conversionLogService.update(conversionLog.setIpDetails(ipDetails.isp(), ipDetails.countryCode()));
         ipRestrictionRules.stream()
                 .filter(rule -> rule.isRestricted(ipDetails))
                 .findAny()

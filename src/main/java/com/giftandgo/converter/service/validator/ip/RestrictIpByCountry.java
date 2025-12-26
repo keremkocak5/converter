@@ -11,7 +11,7 @@ public class RestrictIpByCountry implements IpRestrictable {
 
     @Override
     public boolean isRestricted(IpDetails ipDetails) {
-        return RESTRICTED_COUNTRIES.contains(ipDetails.country());
+        return RESTRICTED_COUNTRIES.contains(ipDetails.countryCode());
     }
 
 }
