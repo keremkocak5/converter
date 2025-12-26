@@ -5,11 +5,12 @@ import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.OutcomeContent;
 import com.giftandgo.converter.service.FileReadable;
 import com.giftandgo.converter.service.FileValidateble;
-import com.giftandgo.converter.util.FileReaderService;
+import com.giftandgo.converter.util.FileReadWriteUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,9 @@ class CommunityTransportChoicesFileService implements FileReadable {
     public List<OutcomeContent> getValidatedFileContent(MultipartFile file, FileValidateble validator) {
         List<String[]> delimitedContent = getDelimitedContent(file);
         validator.validate(delimitedContent);
+        FileReadWriteUtil.exportToFile(Paths.get("kerem.json"));
+
+
         return getParsedContent(delimitedContent);
     }
 
@@ -40,7 +44,7 @@ class CommunityTransportChoicesFileService implements FileReadable {
 
     private List<String[]> getDelimitedContent(MultipartFile file) {
         try {
-            return FileReaderService.read(file.getInputStream(), DELIMITER_PATTERN);
+            return FileReadWriteUtil.read(file.getInputStream(), DELIMITER_PATTERN);
         } catch (Exception e) {
             //log.error("Cannot read file, {}", e); // kerem e mi?
             throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);

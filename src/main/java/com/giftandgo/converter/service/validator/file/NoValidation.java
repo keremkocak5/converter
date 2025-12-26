@@ -9,7 +9,8 @@ import java.util.List;
 public class NoValidation implements FileValidateble {
 
     @Override
-    public void validate(List content) {}
+    public void validate(List content) {
+    }
 
     @Override
     public String getValidationStrategy() {

@@ -1,5 +1,6 @@
 package com.giftandgo.converter.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
@@ -13,5 +14,6 @@ public class Constants {
     public static final List<String> RESTRICTED_COUNTRIES = List.of("Canada");
     public static final List<String> RESTRICTED_ISPS = List.of("AWS");
     public static final String VALID_FILE_FORMAT = "text/plain";
+    public final ObjectMapper SINGLETON_OBJECT_MAPPER = new ObjectMapper();
 
 }

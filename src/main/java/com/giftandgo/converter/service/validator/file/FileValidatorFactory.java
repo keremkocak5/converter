@@ -23,7 +23,7 @@ public class FileValidatorFactory {
                 .stream()
                 .filter(validator -> validator.getValidationStrategy().equals(validationStrategyFeatureFlag))
                 .findFirst()
-                .orElseThrow(() -> new ConverterRuntimeException(ErrorCode.NO_VALIDATION_STRATEGY_FOUND));
+                .orElseThrow(() -> new ConverterRuntimeException(ErrorCode.NO_FILE_VALIDATION_STRATEGY_FOUND));
     }
 
 }
