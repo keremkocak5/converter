@@ -30,6 +30,6 @@ public class ConversionLogService implements ConversionLogCRUD {
     @Override
     @Transactional(readOnly = true)
     public List<ConversionLog> findAll() {
-        return conversionLogRepository.findAll(); // this is a NO - NO!!
+        return conversionLogRepository.findAll(); // findAll is an anti-pattern and only here for demo purposes.
     }
 }

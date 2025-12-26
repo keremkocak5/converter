@@ -3,10 +3,10 @@ package com.giftandgo.converter.service.impl;
 import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.ConversionLog;
-import com.giftandgo.converter.model.FileContent;
 import com.giftandgo.converter.model.IpDetails;
 import com.giftandgo.converter.model.OutcomeContent;
 import com.giftandgo.converter.service.*;
+import com.giftandgo.converter.service.validator.file.FileValidatorFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -25,6 +24,7 @@ public class FileConverterService implements FileConvertable {
     private final ConversionLogCRUD conversionLogService;
     private final FileReadable<List<OutcomeContent>> fileReadable;
     private final Set<IpRestrictable> ipRestrictionRules;
+    private final FileValidatorFactory fileValidatorFactory;
 
     @Override
     public String convertFile(@NonNull MultipartFile file, @NonNull String ip) {
@@ -32,17 +32,13 @@ public class FileConverterService implements FileConvertable {
         ConversionLog conversionLog = saveConversionLog(ip);
         try {
             saveIpDetailsAndRunRestrictionRules(conversionLog);
-            List<OutcomeContent> outcomeContent = fileReadable.getValidatedFileContent(file);
+            List<OutcomeContent> outcomeContent = fileReadable.getValidatedFileContent(file, fileValidatorFactory.getValidator());
             saveExecutionResults(startMoment, conversionLog, HttpStatus.OK); // kerem bu created olsun
         } catch (ConverterRuntimeException e) {
             saveExecutionResults(startMoment, conversionLog, e.getErrorCode().getHttpStatus());
             throw e;
         }
         return "Your file is ready. Filename is kerem";
-    }
-
-    private FileContent validateFile(List<String[]> readFile) {
-        return new FileContent(UUID.randomUUID(), "", "", "", "", Double.MAX_VALUE, Double.MAX_VALUE);
     }
 
     private void saveIpDetailsAndRunRestrictionRules(ConversionLog conversionLog) {

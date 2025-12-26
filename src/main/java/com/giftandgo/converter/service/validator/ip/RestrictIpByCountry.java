@@ -1,4 +1,4 @@
-package com.giftandgo.converter.service.impl;
+package com.giftandgo.converter.service.validator.ip;
 
 import com.giftandgo.converter.model.IpDetails;
 import com.giftandgo.converter.service.IpRestrictable;
