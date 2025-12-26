@@ -2,8 +2,8 @@ package com.giftandgo.converter.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public interface FileSavable {
+public interface FileReadable<T> {
 
-    void validateAndSaveFile(MultipartFile file);
+    T getValidatedFileContent(MultipartFile file);
 
 }

@@ -1,10 +1,9 @@
-package com.giftandgo.converter.service.impl;
+package com.giftandgo.converter.util;
 
 import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
-import com.giftandgo.converter.service.DelimitedFileReadable;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -13,12 +12,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.regex.Pattern;
 
-@Service
 @Slf4j
-public class FileReaderService implements DelimitedFileReadable {
+@UtilityClass
+public class FileReaderService {
 
-    @Override
-    public List<String[]> read(InputStream inputStream, Pattern pattern) {
+    public static List<String[]> read(InputStream inputStream, Pattern pattern) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return reader.lines()
                     .filter(l -> !l.isBlank())
@@ -29,4 +27,5 @@ public class FileReaderService implements DelimitedFileReadable {
             throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);
         }
     }
+
 }

@@ -5,6 +5,7 @@ import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.ConversionLog;
 import com.giftandgo.converter.model.FileContent;
 import com.giftandgo.converter.model.IpDetails;
+import com.giftandgo.converter.model.OutcomeContent;
 import com.giftandgo.converter.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,15 +17,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static com.giftandgo.converter.util.Constants.DELIMITER_PATTERN;
-
 @RequiredArgsConstructor
 @Service
 public class FileConverterService implements FileConvertable {
 
     private final IpTraceable ipApiClient;
     private final ConversionLogCRUD conversionLogService;
-    private final DelimitedFileReadable fileReaderService;
+    private final FileReadable<List<OutcomeContent>> fileReadable;
     private final Set<IpRestrictable> ipRestrictionRules;
 
     @Override
@@ -33,7 +32,7 @@ public class FileConverterService implements FileConvertable {
         ConversionLog conversionLog = saveConversionLog(ip);
         try {
             saveIpDetailsAndRunRestrictionRules(conversionLog);
-            saveFile(validateFile(readFile(file)));
+            List<OutcomeContent> outcomeContent = fileReadable.getValidatedFileContent(file);
             saveExecutionResults(startMoment, conversionLog, HttpStatus.OK); // kerem bu created olsun
         } catch (ConverterRuntimeException e) {
             saveExecutionResults(startMoment, conversionLog, e.getErrorCode().getHttpStatus());
@@ -44,15 +43,6 @@ public class FileConverterService implements FileConvertable {
 
     private FileContent validateFile(List<String[]> readFile) {
         return new FileContent(UUID.randomUUID(), "", "", "", "", Double.MAX_VALUE, Double.MAX_VALUE);
-    }
-
-    private List<String[]> readFile(MultipartFile file) {
-        try {
-            return fileReaderService.read(file.getInputStream(), DELIMITER_PATTERN);
-        } catch (Exception e) {
-            //log.error("Cannot read file, {}", e); // kerem e mi?
-            throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);
-        }
     }
 
     private void saveIpDetailsAndRunRestrictionRules(ConversionLog conversionLog) {
@@ -70,9 +60,6 @@ public class FileConverterService implements FileConvertable {
 
     private ConversionLog saveConversionLog(String ip) {
         return conversionLogService.create("uri", ip);
-    }
-
-    private void saveFile(FileContent fileContent) {
     }
 
     private void saveExecutionResults(long startMoment, ConversionLog conversionLog, HttpStatus httpStatus) {

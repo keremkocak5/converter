@@ -1,4 +1,4 @@
-package com.giftandgo.converter.client;
+package com.giftandgo.converter.client.ipapi;
 
 import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
