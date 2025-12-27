@@ -37,7 +37,7 @@ public class FileConverterService implements FileConvertable {
     }
 
     private ConversionLog saveConversionLog(String ip) {
-        return conversionLogService.create("uri", ip);
+        return conversionLogService.create("uri", ip); // kerem
     }
 
     private void saveExecutionResults(long startMoment, ConversionLog conversionLog, HttpStatus httpStatus) {

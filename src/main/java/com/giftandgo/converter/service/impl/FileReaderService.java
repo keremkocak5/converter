@@ -30,11 +30,8 @@ class FileReaderService implements FileReadable<OutcomeFile> {
 
     @Override
     public OutcomeFile getValidatedFileContent(MultipartFile file) {
-
-
         List<String[]> delimitedContents = getDelimitedContent(file);
         validateContent(fileValidatorFactory.getValidators(), delimitedContents);
-
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         FileReadWriteUtil.write(outputStream, getParsedContent(delimitedContents));
         return new OutcomeFile(

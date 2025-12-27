@@ -15,5 +15,4 @@ public class ConverterRuntimeException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-
 }
