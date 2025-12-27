@@ -22,7 +22,7 @@ public class ValidateIpService implements IpValidatable {
     private final Set<Validatable<IpDetails>> ipValidationRules;
 
     @Override
-    public void saveIpDetailsAndRunValidationRules(ConversionLog conversionLog, String ip) {
+    public void saveIpDetailsAndRunIpValidationRules(ConversionLog conversionLog, String ip) {
         IpDetails ipDetails = ipApiClient
                 .getIpDetails("24.48.0.1")
                 .orElseThrow(() -> new ConverterRuntimeException(ErrorCode.IP_API_RESOLVE_ERROR)); // kerem dikkat

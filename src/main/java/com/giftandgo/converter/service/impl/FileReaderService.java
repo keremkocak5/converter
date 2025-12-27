@@ -1,15 +1,19 @@
-package com.giftandgo.converter.client.filereader;
+package com.giftandgo.converter.service.impl;
 
 import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.OutcomeContent;
+import com.giftandgo.converter.model.OutcomeFile;
 import com.giftandgo.converter.service.FileReadable;
 import com.giftandgo.converter.util.FileReadWriteUtil;
 import com.giftandgo.converter.validator.Validatable;
+import com.giftandgo.converter.validator.impl.file.FileValidatorFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,11 +24,26 @@ import static com.giftandgo.converter.util.Constants.DELIMITER_PATTERN;
 
 @Service
 @RequiredArgsConstructor
-class CommunityTransportChoicesFileService implements FileReadable<List<OutcomeContent>> {
+class FileReaderService implements FileReadable<OutcomeFile> {
+
+    private final FileValidatorFactory fileValidatorFactory;
 
     @Override
-    public List<OutcomeContent> getValidatedFileContent(MultipartFile file, Set<Validatable<String[]>> validators) {
+    public OutcomeFile getValidatedFileContent(MultipartFile file) {
+
+
         List<String[]> delimitedContents = getDelimitedContent(file);
+        validateContent(fileValidatorFactory.getValidators(), delimitedContents);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        FileReadWriteUtil.write(outputStream, getParsedContent(delimitedContents));
+        return new OutcomeFile(
+                "OutcomeFile.json",
+                new ByteArrayInputStream(outputStream.toByteArray())
+        );
+    }
+
+    private void validateContent(Set<Validatable<String[]>> validators, List<String[]> delimitedContents) {
         AtomicInteger lineNumber = new AtomicInteger();
         for (String[] delimitedContent : delimitedContents) {
             lineNumber.incrementAndGet();
@@ -36,7 +55,6 @@ class CommunityTransportChoicesFileService implements FileReadable<List<OutcomeC
                         throw new ConverterRuntimeException(errorCode, lineNumber.get());
                     });
         }
-        return getParsedContent(delimitedContents);
     }
 
     private List<OutcomeContent> getParsedContent(List<String[]> delimitedParts) {
