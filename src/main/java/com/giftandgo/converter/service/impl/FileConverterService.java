@@ -36,18 +36,23 @@ public class FileConverterService implements FileConvertable {
         ConversionLog conversionLog = saveConversionLog(ip);
         try {
             saveIpDetailsAndRunRestrictionRules(conversionLog);
-            List<OutcomeContent> parsedContent = fileReadable.getValidatedFileContent(file, fileValidatorFactory.getValidator());
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            FileReadWriteUtil.write(outputStream, parsedContent);
+            ConvertedFile convertedFile = getConvertedFile(file);
             saveExecutionResults(startMoment, conversionLog, HttpStatus.OK); // kerem bu created olsun
-            return new ConvertedFile(
-                    "OutcomeFile.json",
-                    new ByteArrayInputStream(outputStream.toByteArray())
-            );
+            return convertedFile;
         } catch (ConverterRuntimeException e) {
             saveExecutionResults(startMoment, conversionLog, e.getErrorCode().getHttpStatus());
             throw e;
         }
+    }
+
+    private ConvertedFile getConvertedFile(MultipartFile file) {
+        List<OutcomeContent> parsedContent = fileReadable.getValidatedFileContent(file, fileValidatorFactory.getValidator());
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        FileReadWriteUtil.write(outputStream, parsedContent);
+        return new ConvertedFile(
+                "OutcomeFile.json",
+                new ByteArrayInputStream(outputStream.toByteArray())
+        );
     }
 
     private void saveIpDetailsAndRunRestrictionRules(ConversionLog conversionLog) {
