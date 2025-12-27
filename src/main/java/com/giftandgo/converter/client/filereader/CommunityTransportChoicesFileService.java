@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,8 +24,6 @@ class CommunityTransportChoicesFileService implements FileReadable {
     public List<OutcomeContent> getValidatedFileContent(MultipartFile file, FileValidateble validator) {
         List<String[]> delimitedContent = getDelimitedContent(file);
         validator.validate(delimitedContent);
-        //FileReadWriteUtil.exportToFile(Paths.get("kerem.json"));
-
 
         return getParsedContent(delimitedContent);
     }

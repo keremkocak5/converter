@@ -7,7 +7,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,12 +32,16 @@ public class FileConverterController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Convert a file and get output filename")
-    public String convertFile(@Valid @NonNull @RequestParam("file") MultipartFile file,
-                              @Valid @NonNull HttpServletRequest request) {
+    public ResponseEntity<Resource> convertFile(@Valid @NonNull @RequestParam("file") MultipartFile file,
+                                                @Valid @NonNull HttpServletRequest request) {
         if (!VALID_FILE_FORMAT.equals(file.getContentType())) {
             throw new ConverterRuntimeException(ErrorCode.INVALID_FILE_FORMAT);
         }
-        return fileConverterService.convertFile(file, request.getRemoteAddr());
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=kerem.json")
+                .body(new InputStreamResource(fileConverterService.convertFile(file, request.getRemoteAddr()).inputStream()));
     }
 
 }

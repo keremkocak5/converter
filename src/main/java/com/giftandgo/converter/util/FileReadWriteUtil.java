@@ -10,8 +10,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -33,18 +31,10 @@ public class FileReadWriteUtil {
         }
     }
 
-    public void exportToFile(Path path, Object data) {
-        try (OutputStream os = Files.newOutputStream(path)) {
-            write(os, data);
-        } catch (Exception e) {
-            throw new RuntimeException("Export failed", e);
-        }
-    }
-
-    private <T> void write(OutputStream outputStream, T object) {
+    public <T> void write(OutputStream outputStream, T object) {
         try {
-           // SINGLETON_OBJECT_MAPPER.writerWithDefaultPrettyPrinter()
-         //          .writeValue(outputStream, object);
+            SINGLETON_OBJECT_MAPPER.writerWithDefaultPrettyPrinter()
+                    .writeValue(outputStream, object);
         } catch (Exception e) {
             log.error("Cannot read file, {}", e); // kerem e mi?
             throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);        // kerem hata degissin

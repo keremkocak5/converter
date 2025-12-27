@@ -3,16 +3,20 @@ package com.giftandgo.converter.service.impl;
 import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.ConversionLog;
+import com.giftandgo.converter.model.ConvertedFile;
 import com.giftandgo.converter.model.IpDetails;
 import com.giftandgo.converter.model.OutcomeContent;
 import com.giftandgo.converter.service.*;
 import com.giftandgo.converter.service.validator.file.FileValidatorFactory;
+import com.giftandgo.converter.util.FileReadWriteUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Set;
 
@@ -27,18 +31,23 @@ public class FileConverterService implements FileConvertable {
     private final FileValidatorFactory fileValidatorFactory;
 
     @Override
-    public String convertFile(@NonNull MultipartFile file, @NonNull String ip) {
+    public ConvertedFile convertFile(@NonNull MultipartFile file, @NonNull String ip) {
         long startMoment = System.nanoTime();
         ConversionLog conversionLog = saveConversionLog(ip);
         try {
             saveIpDetailsAndRunRestrictionRules(conversionLog);
-            List<OutcomeContent> outcomeContent = fileReadable.getValidatedFileContent(file, fileValidatorFactory.getValidator());
+            List<OutcomeContent> parsedContent = fileReadable.getValidatedFileContent(file, fileValidatorFactory.getValidator());
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            FileReadWriteUtil.write(outputStream, parsedContent);
             saveExecutionResults(startMoment, conversionLog, HttpStatus.OK); // kerem bu created olsun
+            return new ConvertedFile(
+                    "OutcomeFile.json",
+                    new ByteArrayInputStream(outputStream.toByteArray())
+            );
         } catch (ConverterRuntimeException e) {
             saveExecutionResults(startMoment, conversionLog, e.getErrorCode().getHttpStatus());
             throw e;
         }
-        return "Your file is ready. Filename is kerem";
     }
 
     private void saveIpDetailsAndRunRestrictionRules(ConversionLog conversionLog) {
