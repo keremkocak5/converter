@@ -23,7 +23,7 @@ class CommunityTransportChoicesFileService implements FileReadable {
     @Override
     public List<OutcomeContent> getValidatedFileContent(MultipartFile file, Validatable validator) {
         List<String[]> delimitedContent = getDelimitedContent(file);
-        validator.isValid(delimitedContent);
+        validator.validate(delimitedContent);
         return getParsedContent(delimitedContent);
     }
 
