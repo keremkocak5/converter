@@ -13,7 +13,6 @@ public class ValidateNothing implements Validatable<List<String[]>> {
     @Override
     public boolean isValid(List content) {
         return true;
-
     }
 
     @Override

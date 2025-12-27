@@ -37,7 +37,7 @@ public class FileReadWriteUtil {
                     .writeValue(outputStream, object);
         } catch (Exception e) {
             log.error("Cannot write file, {}", e); // kerem e mi?
-            throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);        // kerem hata degissin
+            throw new ConverterRuntimeException(ErrorCode.CANNOT_WRITE_FILE);
         }
     }
 
