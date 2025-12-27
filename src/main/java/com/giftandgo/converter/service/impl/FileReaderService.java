@@ -58,7 +58,7 @@ class FileReaderService implements FileReadable<OutcomeFile> {
         try {
             return delimitedParts
                     .stream()
-                    .map(delimitedPart -> new OutcomeContent(delimitedPart[2], delimitedPart[4], Double.valueOf(delimitedPart[6])))
+                    .map(delimitedPart -> new OutcomeContent(delimitedPart[2], delimitedPart[4], Double.parseDouble(delimitedPart[6])))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             //log.error("Cannot read file, {}", e); // kerem e mi?

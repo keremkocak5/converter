@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 @UtilityClass
@@ -15,5 +16,6 @@ public class Constants {
     public static final Set<String> RESTRICTED_ISPS = Set.of("AWS", "GCP", "AZURE");
     public static final String VALID_FILE_FORMAT = "text/plain";
     public static final ObjectMapper SINGLETON_OBJECT_MAPPER = new ObjectMapper();
+    public static final Function<Long, Long> TIME_LAPSED_MILLIS = (startMoment) -> (System.nanoTime() - startMoment) / 1_000_000;
 
 }

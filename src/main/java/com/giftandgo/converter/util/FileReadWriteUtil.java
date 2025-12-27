@@ -23,7 +23,7 @@ public class FileReadWriteUtil {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return reader.lines()
                     .filter(l -> !l.isBlank())
-                    .map(l -> pattern.split(l))
+                    .map(pattern::split)
                     .toList();
         } catch (Exception e) {
             log.error("Cannot read file, {}", e); // kerem e mi?

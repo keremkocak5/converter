@@ -23,10 +23,10 @@ public class ConversionLog {
     private LocalDateTime creationDate;
 
     @Column(name = "IP", nullable = false, updatable = false)
-    private String ip;
+    private final String ip;
 
     @Column(name = "URI", nullable = false, updatable = false)
-    private String uri;
+    private final String uri;
 
     @Column(name = "COUNTRY_CODE")
     private String countryCode;

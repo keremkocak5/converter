@@ -6,6 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FileConvertable {
 
-    OutcomeFile convertFile(@NonNull MultipartFile file, @NonNull String ip);
+    OutcomeFile convertFile(@NonNull MultipartFile file, @NonNull String ip, @NonNull String uri);
 
 }

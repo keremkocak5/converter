@@ -3,6 +3,7 @@ package com.giftandgo.converter.controller.v1;
 import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.service.FileConvertable;
+import com.giftandgo.converter.util.IpUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -37,11 +38,12 @@ public class FileConverterController {
         if (!VALID_FILE_FORMAT.equals(file.getContentType())) {
             throw new ConverterRuntimeException(ErrorCode.INVALID_FILE_FORMAT);
         }
+        
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=kerem.json")
-                .body(new InputStreamResource(fileConverterService.convertFile(file, request.getRemoteAddr()).inputStream()));
+                .body(new InputStreamResource(fileConverterService.convertFile(file, IpUtil.getClientIp(request), request.getRequestURI()).inputStream()));
     }
 
 }

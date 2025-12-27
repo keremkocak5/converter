@@ -13,6 +13,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.giftandgo.converter.util.Constants.TIME_LAPSED_MILLIS;
+
 @RequiredArgsConstructor
 @Service
 public class FileConverterService implements FileConvertable {
@@ -22,9 +24,9 @@ public class FileConverterService implements FileConvertable {
     private final IpValidatable validateIpService;
 
     @Override
-    public OutcomeFile convertFile(@NonNull MultipartFile file, @NonNull String ip) {
+    public OutcomeFile convertFile(@NonNull MultipartFile file, @NonNull String ip, @NonNull String uri) {
         long startMoment = System.nanoTime();
-        ConversionLog conversionLog = saveConversionLog(ip);
+        ConversionLog conversionLog = saveConversionLog(uri, ip);
         try {
             validateIpService.saveIpDetailsAndRunIpValidationRules(conversionLog, ip);
             OutcomeFile outcomeFile = fileReadable.getValidatedFileContent(file);
@@ -36,12 +38,12 @@ public class FileConverterService implements FileConvertable {
         }
     }
 
-    private ConversionLog saveConversionLog(String ip) {
-        return conversionLogService.create("uri", ip); // kerem
+    private ConversionLog saveConversionLog( String uri, String ip) {
+        return conversionLogService.create(uri, ip);
     }
 
     private void saveExecutionResults(long startMoment, ConversionLog conversionLog, HttpStatus httpStatus) {
-        conversionLogService.update(conversionLog.setExecutionResults(System.nanoTime() - startMoment, httpStatus.value()));
+        conversionLogService.update(conversionLog.setExecutionResults(TIME_LAPSED_MILLIS.apply(startMoment), httpStatus.value()));
     }
 
 }
