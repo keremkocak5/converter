@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.giftandgo.converter.util.Constants.DELIMITER_PATTERN;
@@ -18,13 +20,23 @@ import static com.giftandgo.converter.util.Constants.DELIMITER_PATTERN;
 
 @Service
 @RequiredArgsConstructor
-class CommunityTransportChoicesFileService implements FileReadable {
+class CommunityTransportChoicesFileService implements FileReadable<List<OutcomeContent>> {
 
     @Override
-    public List<OutcomeContent> getValidatedFileContent(MultipartFile file, Validatable validator) {
-        List<String[]> delimitedContent = getDelimitedContent(file);
-        validator.validate(delimitedContent);
-        return getParsedContent(delimitedContent);
+    public List<OutcomeContent> getValidatedFileContent(MultipartFile file, Set<Validatable<String[]>> validators) {
+        List<String[]> delimitedContents = getDelimitedContent(file);
+        AtomicInteger lineNumber = new AtomicInteger();
+        for (String[] delimitedContent : delimitedContents) {
+            lineNumber.incrementAndGet();
+            validators.stream()
+                    .filter(validator -> !validator.isValid(delimitedContent))
+                    .findAny()
+                    .flatMap(Validatable::getErrorCode)
+                    .ifPresent(errorCode -> {
+                        throw new ConverterRuntimeException(errorCode, lineNumber.get());
+                    });
+        }
+        return getParsedContent(delimitedContents);
     }
 
     private List<OutcomeContent> getParsedContent(List<String[]> delimitedParts) {

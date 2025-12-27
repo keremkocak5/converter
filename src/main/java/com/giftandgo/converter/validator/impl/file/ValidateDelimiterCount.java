@@ -7,20 +7,20 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ValidateNothing implements Validatable<String[]> {
+public class ValidateDelimiterCount implements Validatable<String[]> {
 
     @Override
     public boolean isValid(String[] content) {
-        return true;
+        return content.length == 7;
     }
 
     @Override
     public Optional<ErrorCode> getErrorCode() {
-        return Optional.empty();
+        return Optional.of(ErrorCode.INCORRECT_DELIMITERS);
     }
 
     @Override
     public String getValidationStrategy() {
-        return "NoValidationStrategy";
+        return "DelimiterCountStrategy";
     }
 }

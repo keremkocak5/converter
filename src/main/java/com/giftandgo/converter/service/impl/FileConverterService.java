@@ -45,7 +45,7 @@ public class FileConverterService implements FileConvertable {
     }
 
     private OutcomeFile getConvertedFile(MultipartFile file) {
-        List<OutcomeContent> parsedContent = fileReadable.getValidatedFileContent(file, fileValidatorFactory.getValidator());
+        List<OutcomeContent> parsedContent = fileReadable.getValidatedFileContent(file, fileValidatorFactory.getValidators());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         FileReadWriteUtil.write(outputStream, parsedContent);
         return new OutcomeFile(

@@ -4,15 +4,14 @@ import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.validator.Validatable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ValidateStrict implements Validatable<List<String[]>> {
+public class ValidateEmptyLine implements Validatable<String[]> {
 
     @Override
-    public boolean isValid(List content) {
-        return true;
+    public boolean isValid(String[] content) {
+        return content.length != 0;
     }
 
     @Override
@@ -22,6 +21,6 @@ public class ValidateStrict implements Validatable<List<String[]>> {
 
     @Override
     public String getValidationStrategy() {
-        return "StrictValidationStrategy";
+        return "EmptyLineStrategy";
     }
 }

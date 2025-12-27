@@ -10,4 +10,10 @@ public class ConverterRuntimeException extends RuntimeException {
     @Getter
     private final ErrorCode errorCode;
 
+    public ConverterRuntimeException(ErrorCode errorCode, Object... args) {
+        super(String.format(errorCode.getErrorMessage(), args));
+        this.errorCode = errorCode;
+    }
+
+
 }
