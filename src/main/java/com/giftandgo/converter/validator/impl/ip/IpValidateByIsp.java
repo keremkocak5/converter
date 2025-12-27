@@ -14,18 +14,13 @@ public class IpValidateByIsp implements Validatable<IpDetails> {
 
     @Override
     public boolean isValid(IpDetails ipDetails) {
-        if ( RESTRICTED_ISPS.contains(ipDetails.countryCode())) {
-            // throw
-        };
-        return true;
-
+        return RESTRICTED_ISPS.contains(ipDetails.countryCode());
     }
 
     @Override
     public Optional<ErrorCode> getErrorCode() {
-        return Optional.empty();
+        return Optional.of(ErrorCode.RESTRICTED_ISP);
     }
-
 
     @Override
     public String getValidationStrategy() {

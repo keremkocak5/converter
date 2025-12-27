@@ -13,14 +13,12 @@ public class IpValidateNothing implements Validatable<IpDetails> {
     @Override
     public boolean isValid(IpDetails ipDetails) {
         return true;
-
     }
 
     @Override
     public Optional<ErrorCode> getErrorCode() {
         return Optional.empty();
     }
-
 
     @Override
     public String getValidationStrategy() {
