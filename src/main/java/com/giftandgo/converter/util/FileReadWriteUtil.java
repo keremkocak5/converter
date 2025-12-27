@@ -31,12 +31,12 @@ public class FileReadWriteUtil {
         }
     }
 
-    public <T> void write(OutputStream outputStream, T object) {
+    public static <T> void write(OutputStream outputStream, T object) {
         try {
             SINGLETON_OBJECT_MAPPER.writerWithDefaultPrettyPrinter()
                     .writeValue(outputStream, object);
         } catch (Exception e) {
-            log.error("Cannot read file, {}", e); // kerem e mi?
+            log.error("Cannot write file, {}", e); // kerem e mi?
             throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);        // kerem hata degissin
         }
     }

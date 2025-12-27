@@ -4,7 +4,7 @@ import com.giftandgo.converter.model.IpDetails;
 
 import java.util.Optional;
 
-public interface IpTraceable {
+public interface IpDetailsRetrievable {
 
     Optional<IpDetails> getIpDetails(String ip);
 

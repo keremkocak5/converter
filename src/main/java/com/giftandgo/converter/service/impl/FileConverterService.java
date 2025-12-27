@@ -3,11 +3,15 @@ package com.giftandgo.converter.service.impl;
 import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.ConversionLog;
-import com.giftandgo.converter.model.ConvertedFile;
 import com.giftandgo.converter.model.IpDetails;
 import com.giftandgo.converter.model.OutcomeContent;
-import com.giftandgo.converter.service.*;
-import com.giftandgo.converter.service.validator.file.FileValidatorFactory;
+import com.giftandgo.converter.model.OutcomeFile;
+import com.giftandgo.converter.service.ConversionLogPersistable;
+import com.giftandgo.converter.service.FileConvertable;
+import com.giftandgo.converter.service.FileReadable;
+import com.giftandgo.converter.service.IpDetailsRetrievable;
+import com.giftandgo.converter.validator.Validatable;
+import com.giftandgo.converter.validator.impl.file.FileValidatorFactory;
 import com.giftandgo.converter.util.FileReadWriteUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,32 +28,32 @@ import java.util.Set;
 @Service
 public class FileConverterService implements FileConvertable {
 
-    private final IpTraceable ipApiClient;
-    private final ConversionLogCRUD conversionLogService;
+    private final IpDetailsRetrievable ipApiClient;
+    private final ConversionLogPersistable conversionLogService;
     private final FileReadable<List<OutcomeContent>> fileReadable;
-    private final Set<IpRestrictable> ipRestrictionRules;
+    private final Set<Validatable<IpDetails>> ipRestrictionRules;
     private final FileValidatorFactory fileValidatorFactory;
 
     @Override
-    public ConvertedFile convertFile(@NonNull MultipartFile file, @NonNull String ip) {
+    public OutcomeFile convertFile(@NonNull MultipartFile file, @NonNull String ip) {
         long startMoment = System.nanoTime();
         ConversionLog conversionLog = saveConversionLog(ip);
         try {
             saveIpDetailsAndRunRestrictionRules(conversionLog);
-            ConvertedFile convertedFile = getConvertedFile(file);
+            OutcomeFile outcomeFile = getConvertedFile(file);
             saveExecutionResults(startMoment, conversionLog, HttpStatus.OK); // kerem bu created olsun
-            return convertedFile;
+            return outcomeFile;
         } catch (ConverterRuntimeException e) {
             saveExecutionResults(startMoment, conversionLog, e.getErrorCode().getHttpStatus());
             throw e;
         }
     }
 
-    private ConvertedFile getConvertedFile(MultipartFile file) {
+    private OutcomeFile getConvertedFile(MultipartFile file) {
         List<OutcomeContent> parsedContent = fileReadable.getValidatedFileContent(file, fileValidatorFactory.getValidator());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         FileReadWriteUtil.write(outputStream, parsedContent);
-        return new ConvertedFile(
+        return new OutcomeFile(
                 "OutcomeFile.json",
                 new ByteArrayInputStream(outputStream.toByteArray())
         );
@@ -61,11 +65,11 @@ public class FileConverterService implements FileConvertable {
                 .orElseThrow(() -> new ConverterRuntimeException(ErrorCode.IP_API_RESOLVE_ERROR)); // kerem dikkat
         conversionLogService.update(conversionLog.setIpDetails(ipDetails.isp(), ipDetails.countryCode()));
         ipRestrictionRules.stream()
-                .filter(rule -> rule.isRestricted(ipDetails))
-                .findAny()
-                .ifPresent(restrictionExists -> {
-                    throw new ConverterRuntimeException(ErrorCode.RESTRICTED_IP);
-                });
+                .filter(rule -> rule.getValidationStrategy().equals(""))
+                .filter(rule -> !rule.isValid(ipDetails))
+                .findFirst()
+                .flatMap(Validatable::getErrorCode)
+                .ifPresent(errorCode -> new ConverterRuntimeException(errorCode));
     }
 
     private ConversionLog saveConversionLog(String ip) {

@@ -4,7 +4,7 @@ import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.OutcomeContent;
 import com.giftandgo.converter.service.FileReadable;
-import com.giftandgo.converter.service.FileValidateble;
+import com.giftandgo.converter.validator.Validatable;
 import com.giftandgo.converter.util.FileReadWriteUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,9 +21,9 @@ import static com.giftandgo.converter.util.Constants.DELIMITER_PATTERN;
 class CommunityTransportChoicesFileService implements FileReadable {
 
     @Override
-    public List<OutcomeContent> getValidatedFileContent(MultipartFile file, FileValidateble validator) {
+    public List<OutcomeContent> getValidatedFileContent(MultipartFile file, Validatable validator) {
         List<String[]> delimitedContent = getDelimitedContent(file);
-        validator.validate(delimitedContent);
+        validator.isValid(delimitedContent);
 
         return getParsedContent(delimitedContent);
     }

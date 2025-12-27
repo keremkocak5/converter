@@ -4,7 +4,7 @@ import com.giftandgo.converter.model.ConversionLog;
 
 import java.util.List;
 
-public interface ConversionLogCRUD {
+public interface ConversionLogPersistable {
 
     ConversionLog create(String uri, String ip);
 

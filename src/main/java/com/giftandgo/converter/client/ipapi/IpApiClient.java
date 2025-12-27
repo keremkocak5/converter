@@ -3,7 +3,7 @@ package com.giftandgo.converter.client.ipapi;
 import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.IpDetails;
-import com.giftandgo.converter.service.IpTraceable;
+import com.giftandgo.converter.service.IpDetailsRetrievable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-class IpApiClient implements IpTraceable {
+class IpApiClient implements IpDetailsRetrievable {
 
     private final RestClient ipApiRestClient;
     private final String URI = "/json/{ip}?fields=status,countryCode,isp,message";

@@ -2,7 +2,7 @@ package com.giftandgo.converter.service.impl;
 
 import com.giftandgo.converter.model.ConversionLog;
 import com.giftandgo.converter.repository.ConversionLogRepository;
-import com.giftandgo.converter.service.ConversionLogCRUD;
+import com.giftandgo.converter.service.ConversionLogPersistable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ConversionLogService implements ConversionLogCRUD {
+public class ConversionLogService implements ConversionLogPersistable {
 
     private final ConversionLogRepository conversionLogRepository;
 
