@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static com.giftandgo.converter.util.Constants.DELIMITER_PATTERN;
 
+
 @Service
 @RequiredArgsConstructor
 class CommunityTransportChoicesFileService implements FileReadable {
@@ -24,7 +25,7 @@ class CommunityTransportChoicesFileService implements FileReadable {
     public List<OutcomeContent> getValidatedFileContent(MultipartFile file, FileValidateble validator) {
         List<String[]> delimitedContent = getDelimitedContent(file);
         validator.validate(delimitedContent);
-        FileReadWriteUtil.exportToFile(Paths.get("kerem.json"));
+        //FileReadWriteUtil.exportToFile(Paths.get("kerem.json"));
 
 
         return getParsedContent(delimitedContent);
