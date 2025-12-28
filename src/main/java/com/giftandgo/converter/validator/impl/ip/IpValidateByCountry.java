@@ -3,18 +3,23 @@ package com.giftandgo.converter.validator.impl.ip;
 import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.model.IpDetails;
 import com.giftandgo.converter.validator.Validatable;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
-import static com.giftandgo.converter.util.Constants.RESTRICTED_COUNTRIES;
+import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class IpValidateByCountry implements Validatable<IpDetails> {
+
+    @Value("${ip.validation.restricted-countries}")
+    private final Set<String> restrictedCountries;
 
     @Override
     public boolean isValid(IpDetails ipDetails) {
-        return !RESTRICTED_COUNTRIES.contains(ipDetails.countryCode());
+        return !restrictedCountries.contains(ipDetails.countryCode());
     }
 
     @Override

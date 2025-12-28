@@ -23,7 +23,7 @@ class IpApiClient implements IpDetailsRetrievable {
     private final String URI = "/json/{ip}?fields=status,countryCode,isp,message";
     private final String SUCCESS = "success";
 
-    @Override // kerem retry parametrik olsun
+    @Override
     @Retryable(retryFor = org.springframework.web.client.RestClientException.class, maxAttempts = 3, backoff = @Backoff(delay = 500, multiplier = 2))
     public Optional<IpDetails> getIpDetails(String ip) {
         IpApiResponse response = ipApiRestClient
@@ -31,12 +31,10 @@ class IpApiClient implements IpDetailsRetrievable {
                 .uri(URI, ip)
                 .retrieve()
                 .body(IpApiResponse.class);
-
         if (!SUCCESS.equalsIgnoreCase(response.status())) {
             log.info("IP-API returned failure for ip {}: {}", ip, response.message());
             return Optional.empty();
         }
-
         return Optional.of(new IpDetails(response.countryCode(), response.isp()));
     }
 

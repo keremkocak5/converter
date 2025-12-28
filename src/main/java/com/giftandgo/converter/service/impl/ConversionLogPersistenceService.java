@@ -30,6 +30,6 @@ public class ConversionLogPersistenceService implements ConversionLogPersistable
     @Override
     @Transactional(readOnly = true)
     public List<ConversionLog> findAll() {
-        return conversionLogRepository.findAll(); // findAll is an anti-pattern and only here for demo purposes.
+        return conversionLogRepository.findAll(); // findAll is an anti-pattern and only here for demo purposes. kerem
     }
 }
