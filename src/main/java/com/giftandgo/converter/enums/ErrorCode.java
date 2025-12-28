@@ -22,8 +22,9 @@ public enum ErrorCode {
     INVALID_NAME("I0023", "Name not valid at line %d", HttpStatus.BAD_REQUEST),
     INVALID_LIKES("I0024", "Likes not valid at line %d", HttpStatus.BAD_REQUEST),
     INVALID_TRANSPORT("I0025", "Transport not valid at line %d", HttpStatus.BAD_REQUEST),
-    INVALID_AVG_SPEED("I0026", "Transport not valid at line %d", HttpStatus.BAD_REQUEST),
-    INVALID_TOP_SPEED("I0027", "Transport not valid at line %d", HttpStatus.BAD_REQUEST),
+    INVALID_AVG_SPEED("I0026", "Average speed not valid at line %d", HttpStatus.BAD_REQUEST),
+    INVALID_TOP_SPEED("I0027", "Top speed not valid at line %d", HttpStatus.BAD_REQUEST),
+    EMPTY_LINE("I0028", "Empty line found at line %d", HttpStatus.BAD_REQUEST),
     INTERNAL_SERVER_ERROR("I0000", "Internal Server Error.", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String errorCode;

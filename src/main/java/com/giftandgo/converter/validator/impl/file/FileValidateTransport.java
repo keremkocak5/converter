@@ -7,20 +7,20 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ValidateDelimiterCount implements Validatable<String[]> {
+public class FileValidateTransport implements Validatable<String[]> {
 
     @Override
     public boolean isValid(String[] content) {
-        return content.length == 7;
+        return content[4].length() < 100;
     }
 
     @Override
     public Optional<ErrorCode> getErrorCode() {
-        return Optional.of(ErrorCode.INCORRECT_DELIMITERS);
+        return Optional.of(ErrorCode.INVALID_TRANSPORT);
     }
 
     @Override
     public String getValidationStrategy() {
-        return "DelimiterCountStrategy";
+        return "TransportStrategy";
     }
 }

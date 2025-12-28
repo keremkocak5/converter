@@ -38,7 +38,7 @@ public class FileConverterService implements FileConvertable {
         }
     }
 
-    private ConversionLog saveConversionLog( String uri, String ip) {
+    private ConversionLog saveConversionLog(String uri, String ip) {
         return conversionLogService.create(uri, ip);
     }
 

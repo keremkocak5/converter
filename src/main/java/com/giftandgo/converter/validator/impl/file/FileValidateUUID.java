@@ -5,22 +5,28 @@ import com.giftandgo.converter.validator.Validatable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
-public class ValidateNothing implements Validatable<String[]> {
+public class FileValidateUUID implements Validatable<String[]> {
 
     @Override
     public boolean isValid(String[] content) {
-        return true;
+        try {
+            UUID uuid = UUID.fromString(content[0]);
+            return true;
+        } catch (IllegalArgumentException exception) {
+            return false;
+        }
     }
 
     @Override
     public Optional<ErrorCode> getErrorCode() {
-        return Optional.empty();
+        return Optional.of(ErrorCode.INVALID_UUID);
     }
 
     @Override
     public String getValidationStrategy() {
-        return "NoValidationStrategy";
+        return "UUIDStrategy";
     }
 }

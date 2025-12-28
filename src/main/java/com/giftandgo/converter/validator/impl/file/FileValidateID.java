@@ -5,22 +5,25 @@ import com.giftandgo.converter.validator.Validatable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
-public class ValidateEmptyLine implements Validatable<String[]> {
+public class FileValidateID implements Validatable<String[]> {
+
+    private static final Pattern ID_PATTERN = Pattern.compile("^(\\d+)X\\1D\\d+$");
 
     @Override
     public boolean isValid(String[] content) {
-        return content.length != 0;
+        return ID_PATTERN.matcher(content[1]).matches();
     }
 
     @Override
     public Optional<ErrorCode> getErrorCode() {
-        return Optional.empty();
+        return Optional.of(ErrorCode.INVALID_ID);
     }
 
     @Override
     public String getValidationStrategy() {
-        return "EmptyLineStrategy";
+        return "IDStrategy";
     }
 }

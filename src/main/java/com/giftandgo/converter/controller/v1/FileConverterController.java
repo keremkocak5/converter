@@ -38,7 +38,7 @@ public class FileConverterController {
         if (!VALID_FILE_FORMAT.equals(file.getContentType())) {
             throw new ConverterRuntimeException(ErrorCode.INVALID_FILE_FORMAT);
         }
-        
+
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.CONTENT_DISPOSITION,
