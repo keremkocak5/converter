@@ -10,6 +10,8 @@ import java.util.Optional;
 @Service
 public class IpValidateNothing implements Validatable<IpDetails> {
 
+    public static final String VALIDATE_NOTHING_STRATEGY_KEY = "ValidateNothingStrategy";
+
     @Override
     public boolean isValid(IpDetails ipDetails) {
         return true;
@@ -22,7 +24,7 @@ public class IpValidateNothing implements Validatable<IpDetails> {
 
     @Override
     public String getValidationKey() {
-        return "ValidateNothingStrategy";
+        return VALIDATE_NOTHING_STRATEGY_KEY;
     }
 
     @Override

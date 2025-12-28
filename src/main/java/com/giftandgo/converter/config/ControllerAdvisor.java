@@ -26,7 +26,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {Exception.class})
     protected ProblemDetail handleException(Exception e) {
-        log.error("Unexpected exception! ", e); // kerem test et
+        log.error("Unexpected exception! ", e);
         return ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), "Internal Server Error");
     }
 

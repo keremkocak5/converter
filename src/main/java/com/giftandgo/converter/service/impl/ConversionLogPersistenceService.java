@@ -27,9 +27,4 @@ public class ConversionLogPersistenceService implements ConversionLogPersistable
         return conversionLogRepository.save(conversionLog);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<ConversionLog> findAll() {
-        return conversionLogRepository.findAll(); // findAll is an anti-pattern and only here for demo purposes. kerem
-    }
 }

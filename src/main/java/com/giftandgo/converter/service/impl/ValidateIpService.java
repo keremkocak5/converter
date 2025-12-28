@@ -12,6 +12,10 @@ import com.giftandgo.converter.validator.impl.ip.IpValidatorFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static com.giftandgo.converter.validator.impl.ip.IpValidateNothing.VALIDATE_NOTHING_STRATEGY_KEY;
+
 @Service
 @RequiredArgsConstructor
 public class ValidateIpService implements IpValidatable {
@@ -22,12 +26,15 @@ public class ValidateIpService implements IpValidatable {
 
     @Override
     public void saveIpDetailsAndRunIpValidationRules(ConversionLog conversionLog, String ip) {
+        List<Validatable<IpDetails>> validators = ipValidatorFactory.getValidators();
+        if (validators.stream().filter(validator -> VALIDATE_NOTHING_STRATEGY_KEY.equals(validator.getValidationKey())).findAny().isPresent()) {
+            return;
+        }
         IpDetails ipDetails = ipApiClient
-                .getIpDetails("24.48.0.1") // kerem
+                .getIpDetails(ip) // kerem
                 .orElseThrow(() -> new ConverterRuntimeException(ErrorCode.IP_API_RESOLVE_ERROR)); // kerem dikkat
         conversionLogService.update(conversionLog.setIpDetails(ipDetails.isp(), ipDetails.countryCode()));
-        ipValidatorFactory.getValidators()
-                .stream()
+        validators.stream()
                 .filter(rule -> !rule.isValid(ipDetails))
                 .findFirst()
                 .flatMap(Validatable::getErrorCode)
