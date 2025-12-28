@@ -27,7 +27,7 @@ public class ValidateIpService implements IpValidatable {
     @Override
     public void saveIpDetailsAndRunIpValidationRules(ConversionLog conversionLog, String ip) {
         List<Validatable<IpDetails>> validators = ipValidatorFactory.getValidators();
-        if (validators.stream().filter(validator -> VALIDATE_NOTHING_STRATEGY_KEY.equals(validator.getValidationKey())).findAny().isPresent()) {
+        if (validators.size() == 1 && validators.stream().filter(validator -> VALIDATE_NOTHING_STRATEGY_KEY.equals(validator.getValidationKey())).findAny().isPresent()) {
             return;
         }
         IpDetails ipDetails = ipApiClient
