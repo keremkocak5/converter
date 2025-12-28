@@ -10,7 +10,6 @@ import com.giftandgo.converter.service.IpValidatable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
