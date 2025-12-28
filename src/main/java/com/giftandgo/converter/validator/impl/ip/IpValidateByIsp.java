@@ -23,12 +23,12 @@ public class IpValidateByIsp implements Validatable<IpDetails> {
     }
 
     @Override
-    public String getValidationStrategy() {
+    public String getValidationKey() {
         return "ValidateISPStrategy";
     }
 
     @Override
-    public int getRulePriority() {
+    public int getValidationPriority() {
         return 10;
     }
 }

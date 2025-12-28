@@ -20,12 +20,12 @@ public class FileValidateEmptyLine implements Validatable<String[]> {
     }
 
     @Override
-    public String getValidationStrategy() {
+    public String getValidationKey() {
         return "EmptyLineStrategy";
     }
 
     @Override
-    public int getRulePriority() {
-        return 2;
+    public int getValidationPriority() {
+        return 1;
     }
 }

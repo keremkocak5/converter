@@ -16,13 +16,13 @@ public class FileValidatorFactory {
     private final List<Validatable<String[]>> validators;
 
     @Value("${feature.flag.file.validation.strategies:[NoValidationStrategy]}")
-    private List<String> strategies;
+    private final List<String> strategies;
 
     public List<Validatable<String[]>> getValidators() {
         return validators
                 .stream()
-                .sorted(Comparator.comparing(Validatable::getRulePriority))
-                .filter(validator -> strategies.contains(validator.getValidationStrategy()))
+                .sorted(Comparator.comparing(Validatable::getValidationPriority)) // kerem dogru siraliyor mu
+                .filter(validator -> strategies.contains(validator.getValidationKey()))
                 .collect(Collectors.toList());
     }
 

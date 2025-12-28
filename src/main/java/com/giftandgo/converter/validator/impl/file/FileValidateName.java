@@ -6,12 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 @Service
 public class FileValidateName implements Validatable<String[]> {
-
-    private static final Pattern ID_PATTERN = Pattern.compile("^(\\d+)X\\1D\\d+$");
 
     @Override
     public boolean isValid(String[] content) {
@@ -24,12 +21,12 @@ public class FileValidateName implements Validatable<String[]> {
     }
 
     @Override
-    public String getValidationStrategy() {
+    public String getValidationKey() {
         return "NameStrategy";
     }
 
     @Override
-    public int getRulePriority() {
+    public int getValidationPriority() {
         return 10;
     }
 }

@@ -25,12 +25,12 @@ public class FileValidateTopSpeed implements Validatable<String[]> {
     }
 
     @Override
-    public String getValidationStrategy() {
+    public String getValidationKey() {
         return "TopSpeedStrategy";
     }
 
     @Override
-    public int getRulePriority() {
+    public int getValidationPriority() {
         return 10;
     }
 }

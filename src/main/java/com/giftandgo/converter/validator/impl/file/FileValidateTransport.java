@@ -20,12 +20,12 @@ public class FileValidateTransport implements Validatable<String[]> {
     }
 
     @Override
-    public String getValidationStrategy() {
+    public String getValidationKey() {
         return "TransportStrategy";
     }
 
     @Override
-    public int getRulePriority() {
+    public int getValidationPriority() {
         return 10;
     }
 }

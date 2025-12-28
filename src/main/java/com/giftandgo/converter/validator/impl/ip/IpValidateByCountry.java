@@ -23,12 +23,12 @@ public class IpValidateByCountry implements Validatable<IpDetails> {
     }
 
     @Override
-    public String getValidationStrategy() {
+    public String getValidationKey() {
         return "ValidateCountryStrategy";
     }
 
     @Override
-    public int getRulePriority() {
+    public int getValidationPriority() {
         return 10;
     }
 }

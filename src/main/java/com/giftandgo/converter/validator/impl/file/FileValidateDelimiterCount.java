@@ -20,12 +20,12 @@ public class FileValidateDelimiterCount implements Validatable<String[]> {
     }
 
     @Override
-    public String getValidationStrategy() {
+    public String getValidationKey() {
         return "DelimiterCountStrategy";
     }
 
     @Override
-    public int getRulePriority() {
-        return 1;
+    public int getValidationPriority() {
+        return 2;
     }
 }

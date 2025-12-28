@@ -30,7 +30,7 @@ class FileReaderService implements FileReadable<OutcomeFile> {
     @Override
     public OutcomeFile getValidatedFileContent(MultipartFile file) {
         List<String[]> delimitedContents = getDelimitedContent(file);
-        validateContent(fileValidatorFactory.getValidators(), delimitedContents);
+        validateContent(delimitedContents);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         FileReadWriteUtil.write(outputStream, getParsedContent(delimitedContents));
         return new OutcomeFile(
@@ -39,11 +39,12 @@ class FileReaderService implements FileReadable<OutcomeFile> {
         );
     }
 
-    private void validateContent(List<Validatable<String[]>> validators, List<String[]> delimitedContents) {
+    private void validateContent(List<String[]> delimitedContents) {
         AtomicInteger lineNumber = new AtomicInteger();
         for (String[] delimitedContent : delimitedContents) {
             lineNumber.incrementAndGet();
-            validators.stream()
+            fileValidatorFactory.getValidators()
+                    .stream()
                     .filter(validator -> !validator.isValid(delimitedContent))
                     .findAny()
                     .flatMap(Validatable::getErrorCode)

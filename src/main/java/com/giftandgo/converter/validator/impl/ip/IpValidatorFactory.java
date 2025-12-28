@@ -17,13 +17,13 @@ public class IpValidatorFactory {
     private final List<Validatable<IpDetails>> validators;
 
     @Value("${feature.flag.ip.validation.strategies:[ValidateNothingStrategy]}")
-    private List<String> strategies;
+    private final List<String> strategies;
 
     public List<Validatable<IpDetails>> getValidators() {
         return validators
                 .stream()
-                .sorted(Comparator.comparing(Validatable::getRulePriority))
-                .filter(validator -> strategies.contains(validator.getValidationStrategy()))
+                .sorted(Comparator.comparing(Validatable::getValidationPriority))
+                .filter(validator -> strategies.contains(validator.getValidationKey()))
                 .collect(Collectors.toList());
     }
 

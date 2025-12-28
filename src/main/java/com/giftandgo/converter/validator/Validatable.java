@@ -10,8 +10,8 @@ public interface Validatable<T> {
 
     Optional<ErrorCode> getErrorCode();
 
-    String getValidationStrategy();
+    String getValidationKey();
 
-    int getRulePriority();
+    int getValidationPriority();
 
 }
