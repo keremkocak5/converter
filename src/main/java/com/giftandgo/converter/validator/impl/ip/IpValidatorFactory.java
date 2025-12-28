@@ -16,7 +16,7 @@ public class IpValidatorFactory {
 
     private final Set<Validatable<IpDetails>> validators;
 
-    @Value("${feature.flag.ip.validation.strategies}")
+    @Value("${feature.flag.ip.validation.strategies:[ValidateNothingStrategy]}")
     private List<String> strategies;
 
     public Set<Validatable<IpDetails>> getValidators() {

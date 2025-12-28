@@ -20,7 +20,7 @@ import static com.giftandgo.converter.util.Constants.TIME_LAPSED_MILLIS;
 public class FileConverterService implements FileConvertable {
 
     private final ConversionLogPersistable conversionLogService;
-    private final FileReadable<OutcomeFile> fileReadable;
+    private final FileReadable<OutcomeFile> fileReaderService;
     private final IpValidatable validateIpService;
 
     @Override
@@ -29,7 +29,7 @@ public class FileConverterService implements FileConvertable {
         ConversionLog conversionLog = saveConversionLog(uri, ip);
         try {
             validateIpService.saveIpDetailsAndRunIpValidationRules(conversionLog, ip);
-            OutcomeFile outcomeFile = fileReadable.getValidatedFileContent(file);
+            OutcomeFile outcomeFile = fileReaderService.getValidatedFileContent(file);
             saveExecutionResults(startMoment, conversionLog, HttpStatus.OK);
             return outcomeFile;
         } catch (ConverterRuntimeException e) {

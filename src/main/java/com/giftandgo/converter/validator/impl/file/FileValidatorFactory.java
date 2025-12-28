@@ -15,7 +15,7 @@ public class FileValidatorFactory {
 
     private final Set<Validatable<String[]>> validators;
 
-    @Value("${feature.flag.file.validation.strategies}")
+    @Value("${feature.flag.file.validation.strategies:[NoValidationStrategy]}")
     private List<String> strategies;
 
     public Set<Validatable<String[]>> getValidators() {
