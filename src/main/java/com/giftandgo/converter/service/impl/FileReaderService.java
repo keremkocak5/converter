@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -40,7 +39,7 @@ class FileReaderService implements FileReadable<OutcomeFile> {
         );
     }
 
-    private void validateContent(Set<Validatable<String[]>> validators, List<String[]> delimitedContents) {
+    private void validateContent(List<Validatable<String[]>> validators, List<String[]> delimitedContents) {
         AtomicInteger lineNumber = new AtomicInteger();
         for (String[] delimitedContent : delimitedContents) {
             lineNumber.incrementAndGet();

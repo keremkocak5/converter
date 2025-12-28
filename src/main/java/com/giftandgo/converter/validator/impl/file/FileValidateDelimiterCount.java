@@ -23,4 +23,9 @@ public class FileValidateDelimiterCount implements Validatable<String[]> {
     public String getValidationStrategy() {
         return "DelimiterCountStrategy";
     }
+
+    @Override
+    public int getRulePriority() {
+        return 1;
+    }
 }

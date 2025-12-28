@@ -5,24 +5,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class FileValidatorFactory {
 
-    private final Set<Validatable<String[]>> validators;
+    private final List<Validatable<String[]>> validators;
 
     @Value("${feature.flag.file.validation.strategies:[NoValidationStrategy]}")
     private List<String> strategies;
 
-    public Set<Validatable<String[]>> getValidators() {
+    public List<Validatable<String[]>> getValidators() {
         return validators
                 .stream()
+                .sorted(Comparator.comparing(Validatable::getRulePriority))
                 .filter(validator -> strategies.contains(validator.getValidationStrategy()))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
 }

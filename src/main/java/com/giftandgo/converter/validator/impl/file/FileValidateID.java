@@ -26,4 +26,9 @@ public class FileValidateID implements Validatable<String[]> {
     public String getValidationStrategy() {
         return "IDStrategy";
     }
+
+    @Override
+    public int getRulePriority() {
+        return 10;
+    }
 }

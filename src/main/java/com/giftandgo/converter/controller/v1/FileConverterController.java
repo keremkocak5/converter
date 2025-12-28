@@ -1,7 +1,6 @@
 package com.giftandgo.converter.controller.v1;
 
-import com.giftandgo.converter.enums.ErrorCode;
-import com.giftandgo.converter.exception.ConverterRuntimeException;
+import com.giftandgo.converter.model.OutcomeFile;
 import com.giftandgo.converter.service.FileConvertable;
 import com.giftandgo.converter.util.IpUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.giftandgo.converter.util.Constants.VALID_FILE_FORMAT;
-
 @RestController
 @RequestMapping("/v1/file")
 @RequiredArgsConstructor
@@ -35,15 +32,12 @@ public class FileConverterController {
     @Operation(summary = "Convert a file and get output")
     public ResponseEntity<Resource> convertFile(@Valid @NonNull @RequestParam("file") MultipartFile file,
                                                 @Valid @NonNull HttpServletRequest request) {
-        if (!VALID_FILE_FORMAT.equals(file.getContentType())) {
-            throw new ConverterRuntimeException(ErrorCode.INVALID_FILE_FORMAT);
-        }
-
+        OutcomeFile outcomeFile = fileConverterService.convertFile(file, IpUtil.getClientIp(request), request.getRequestURI());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=kerem.json")
-                .body(new InputStreamResource(fileConverterService.convertFile(file, IpUtil.getClientIp(request), request.getRequestURI()).inputStream()));
+                .header(HttpHeaders.CONTENT_DISPOSITION, // neden bu kerem
+                        "attachment; filename=" + outcomeFile.fileName())
+                .body(new InputStreamResource(outcomeFile.inputStream()));
     }
 
 }

@@ -23,4 +23,9 @@ public class FileValidateEmptyLine implements Validatable<String[]> {
     public String getValidationStrategy() {
         return "EmptyLineStrategy";
     }
+
+    @Override
+    public int getRulePriority() {
+        return 2;
+    }
 }

@@ -24,4 +24,9 @@ public class IpValidateNothing implements Validatable<IpDetails> {
     public String getValidationStrategy() {
         return "ValidateNothingStrategy";
     }
+
+    @Override
+    public int getRulePriority() {
+        return 0;
+    }
 }

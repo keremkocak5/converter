@@ -27,4 +27,9 @@ public class FileValidateName implements Validatable<String[]> {
     public String getValidationStrategy() {
         return "NameStrategy";
     }
+
+    @Override
+    public int getRulePriority() {
+        return 10;
+    }
 }

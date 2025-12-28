@@ -6,24 +6,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class IpValidatorFactory {
 
-    private final Set<Validatable<IpDetails>> validators;
+    private final List<Validatable<IpDetails>> validators;
 
     @Value("${feature.flag.ip.validation.strategies:[ValidateNothingStrategy]}")
     private List<String> strategies;
 
-    public Set<Validatable<IpDetails>> getValidators() {
+    public List<Validatable<IpDetails>> getValidators() {
         return validators
                 .stream()
+                .sorted(Comparator.comparing(Validatable::getRulePriority))
                 .filter(validator -> strategies.contains(validator.getValidationStrategy()))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
 }

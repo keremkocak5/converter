@@ -12,4 +12,6 @@ public interface Validatable<T> {
 
     String getValidationStrategy();
 
+    int getRulePriority();
+
 }

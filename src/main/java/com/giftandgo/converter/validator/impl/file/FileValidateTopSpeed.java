@@ -28,4 +28,9 @@ public class FileValidateTopSpeed implements Validatable<String[]> {
     public String getValidationStrategy() {
         return "TopSpeedStrategy";
     }
+
+    @Override
+    public int getRulePriority() {
+        return 10;
+    }
 }

@@ -26,4 +26,9 @@ public class IpValidateByCountry implements Validatable<IpDetails> {
     public String getValidationStrategy() {
         return "ValidateCountryStrategy";
     }
+
+    @Override
+    public int getRulePriority() {
+        return 10;
+    }
 }

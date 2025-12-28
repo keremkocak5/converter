@@ -26,4 +26,9 @@ public class IpValidateByIsp implements Validatable<IpDetails> {
     public String getValidationStrategy() {
         return "ValidateISPStrategy";
     }
+
+    @Override
+    public int getRulePriority() {
+        return 10;
+    }
 }

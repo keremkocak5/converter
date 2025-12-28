@@ -23,4 +23,9 @@ public class FileValidateNothing implements Validatable<String[]> {
     public String getValidationStrategy() {
         return "NoValidationStrategy";
     }
+
+    @Override
+    public int getRulePriority() {
+        return 0;
+    }
 }

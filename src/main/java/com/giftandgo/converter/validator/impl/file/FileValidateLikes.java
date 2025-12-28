@@ -23,4 +23,9 @@ public class FileValidateLikes implements Validatable<String[]> {
     public String getValidationStrategy() {
         return "LikesStrategy";
     }
+
+    @Override
+    public int getRulePriority() {
+        return 10;
+    }
 }

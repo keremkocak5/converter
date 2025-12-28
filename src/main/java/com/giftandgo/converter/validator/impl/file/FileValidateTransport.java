@@ -23,4 +23,9 @@ public class FileValidateTransport implements Validatable<String[]> {
     public String getValidationStrategy() {
         return "TransportStrategy";
     }
+
+    @Override
+    public int getRulePriority() {
+        return 10;
+    }
 }

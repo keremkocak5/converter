@@ -28,4 +28,9 @@ public class FileValidateAvgSpeed implements Validatable<String[]> {
     public String getValidationStrategy() {
         return "AvgSpeedStrategy";
     }
+
+    @Override
+    public int getRulePriority() {
+        return 10;
+    }
 }
