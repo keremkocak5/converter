@@ -26,7 +26,7 @@ public class FileReadWriteUtil {
                     .map(pattern::split)
                     .toList();
         } catch (Exception e) {
-            log.error("Cannot read file, {}", e); // kerem e mi?
+            log.error("Cannot read file, ", e);
             throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);
         }
     }
@@ -36,7 +36,7 @@ public class FileReadWriteUtil {
             SINGLETON_OBJECT_MAPPER.writerWithDefaultPrettyPrinter()
                     .writeValue(outputStream, object);
         } catch (Exception e) {
-            log.error("Cannot write file, {}", e); // kerem e mi?
+            log.error("Cannot write file, ", e);
             throw new ConverterRuntimeException(ErrorCode.CANNOT_WRITE_FILE);
         }
     }

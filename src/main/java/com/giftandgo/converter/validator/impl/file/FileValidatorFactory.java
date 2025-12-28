@@ -21,7 +21,7 @@ public class FileValidatorFactory {
     public List<Validatable<String[]>> getValidators() {
         return validators
                 .stream()
-                .sorted(Comparator.comparing(Validatable::getValidationPriority)) // kerem dogru siraliyor mu
+                .sorted(Comparator.comparing(Validatable::getValidationPriority))
                 .filter(validator -> strategies.contains(validator.getValidationKey()))
                 .collect(Collectors.toList());
     }

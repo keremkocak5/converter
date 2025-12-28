@@ -31,8 +31,8 @@ public class ValidateIpService implements IpValidatable {
             return;
         }
         IpDetails ipDetails = ipApiClient
-                .getIpDetails(ip) // kerem
-                .orElseThrow(() -> new ConverterRuntimeException(ErrorCode.IP_API_RESOLVE_ERROR)); // kerem dikkat
+                .getIpDetails(ip)
+                .orElseThrow(() -> new ConverterRuntimeException(ErrorCode.IP_API_RESOLVE_ERROR));
         conversionLogService.update(conversionLog.setIpDetails(ipDetails.isp(), ipDetails.countryCode()));
         validators.stream()
                 .filter(rule -> !rule.isValid(ipDetails))
