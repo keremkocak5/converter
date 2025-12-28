@@ -31,7 +31,9 @@ public class ValidateIpService implements IpValidatable {
                 .filter(rule -> !rule.isValid(ipDetails))
                 .findFirst()
                 .flatMap(Validatable::getErrorCode)
-                .ifPresent(ConverterRuntimeException::new);
+                .ifPresent(errorCode -> {
+                    throw new ConverterRuntimeException(errorCode);
+                });
     }
 
 }

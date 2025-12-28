@@ -20,7 +20,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 e.getMessage()
         );
         problemDetail.setProperty("errorCode", e.getErrorCode().getErrorCode());
-        return problemDetail; // kerem mesaj gelmiyor??
+        problemDetail.setProperty("title", e.getErrorCode().getErrorMessage());
+        return problemDetail;
     }
 
     @ExceptionHandler(value = {Exception.class})
