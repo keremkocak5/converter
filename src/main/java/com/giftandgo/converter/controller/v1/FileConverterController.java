@@ -35,7 +35,7 @@ public class FileConverterController {
         OutcomeFile outcomeFile = fileConverterService.convertFile(file, IpUtil.getClientIp(request), request.getRequestURI());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.CONTENT_DISPOSITION, // neden bu kerem
+                .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=" + outcomeFile.fileName())
                 .body(new InputStreamResource(outcomeFile.inputStream()));
     }

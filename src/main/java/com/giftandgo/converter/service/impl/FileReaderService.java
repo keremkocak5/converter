@@ -9,6 +9,7 @@ import com.giftandgo.converter.util.FileReadWriteUtil;
 import com.giftandgo.converter.validator.Validatable;
 import com.giftandgo.converter.validator.impl.file.FileValidatorFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,7 @@ import static com.giftandgo.converter.util.Constants.DELIMITER_PATTERN;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 class FileReaderService implements FileReadable<OutcomeFile> {
 
     private final FileValidatorFactory fileValidatorFactory;
@@ -61,8 +63,8 @@ class FileReaderService implements FileReadable<OutcomeFile> {
                     .map(delimitedPart -> new OutcomeContent(delimitedPart[2], delimitedPart[4], Double.parseDouble(delimitedPart[6])))
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            //log.error("Cannot read file, {}", e); // kerem e mi?
-            throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE); // kerem buraya yeni bi exception ekle
+            log.error("Cannot read file. ", e);
+            throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);
         }
     }
 
@@ -70,8 +72,8 @@ class FileReaderService implements FileReadable<OutcomeFile> {
         try {
             return FileReadWriteUtil.read(file.getInputStream(), DELIMITER_PATTERN);
         } catch (Exception e) {
-            //log.error("Cannot read file, {}", e); // kerem e mi?
-            throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);
+            log.error("Cannot write file. ", e);
+            throw new ConverterRuntimeException(ErrorCode.CANNOT_WRITE_FILE);
         }
     }
 
