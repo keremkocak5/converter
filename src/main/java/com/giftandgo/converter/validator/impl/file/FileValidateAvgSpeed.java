@@ -14,7 +14,7 @@ public class FileValidateAvgSpeed implements Validatable<String[]> {
         try {
             Double.parseDouble(content[5]);
             return true;
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             return false;
         }
     }
