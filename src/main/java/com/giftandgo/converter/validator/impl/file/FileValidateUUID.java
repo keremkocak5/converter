@@ -13,7 +13,7 @@ public class FileValidateUUID implements Validatable<String[]> {
     @Override
     public boolean isValid(String[] content) {
         try {
-            UUID uuid = UUID.fromString(content[0]);
+            UUID.fromString(content[0]);
             return true;
         } catch (IllegalArgumentException exception) {
             return false;

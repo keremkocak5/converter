@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ConversionLogService implements ConversionLogPersistable {
+public class ConversionLogPersistenceService implements ConversionLogPersistable {
 
     private final ConversionLogRepository conversionLogRepository;
 
