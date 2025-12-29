@@ -25,7 +25,7 @@ abstract class FileReaderServiceTemplate<T> implements FileReadable<OutcomeFile>
 
     abstract Pattern getDelimiterPattern();
 
-    abstract T mapLine(String[] delimitedPart);
+    abstract T mapLineToOutputContent(String[] delimitedPart);
 
     abstract String getFileName();
 
@@ -33,10 +33,8 @@ abstract class FileReaderServiceTemplate<T> implements FileReadable<OutcomeFile>
     public OutcomeFile getValidatedFileContent(MultipartFile file) {
         List<String[]> lines = getDelimitedContent(file);
         validateContent(lines);
-
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         FileReadWriteUtil.write(outputStream, getParsedContent(lines));
-
         return new OutcomeFile(
                 getFileName(),
                 new ByteArrayInputStream(outputStream.toByteArray())
@@ -46,7 +44,7 @@ abstract class FileReaderServiceTemplate<T> implements FileReadable<OutcomeFile>
     private List<T> getParsedContent(List<String[]> delimitedParts) {
         try {
             return delimitedParts.stream()
-                    .map(this::mapLine)
+                    .map(this::mapLineToOutputContent)
                     .collect(Collectors.toList());
         } catch (Exception e) {
             log.error("Cannot read file.", e);

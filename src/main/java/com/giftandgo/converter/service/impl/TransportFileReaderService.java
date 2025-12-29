@@ -3,9 +3,8 @@ package com.giftandgo.converter.service.impl;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.OutcomeContent;
 import com.giftandgo.converter.validator.Validatable;
-import com.giftandgo.converter.validator.impl.file.FileValidatorFactory;
+import com.giftandgo.converter.validator.impl.file.TransportFileValidatorFactory;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,17 +16,16 @@ import static com.giftandgo.converter.util.Constants.OUTCOME_FILE_NAME;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 class TransportFileReaderService extends FileReaderServiceTemplate<OutcomeContent> {
 
-    private final FileValidatorFactory fileValidatorFactory;
+    private final TransportFileValidatorFactory transportFileValidatorFactory;
 
     @Override
     void validateContent(List<String[]> lines) {
         AtomicInteger lineNumber = new AtomicInteger();
         for (String[] line : lines) {
             int currentLine = lineNumber.incrementAndGet();
-            fileValidatorFactory.getValidators()
+            transportFileValidatorFactory.getValidators()
                     .stream()
                     .filter(validator -> !validator.isValid(line))
                     .findAny()
@@ -42,7 +40,7 @@ class TransportFileReaderService extends FileReaderServiceTemplate<OutcomeConten
     }
 
     @Override
-    OutcomeContent mapLine(String[] delimitedPart) {
+    OutcomeContent mapLineToOutputContent(String[] delimitedPart) {
         return new OutcomeContent(
                 delimitedPart[2],
                 delimitedPart[4],

@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FileValidatorFactoryTest {
+class TransportFileValidatorFactoryTest {
 
     @Test
     void getValidatorsShouldReturnValidatorsWhenFilterWorking() {
@@ -15,7 +15,7 @@ class FileValidatorFactoryTest {
         Validatable<String[]> fileValidateDelimiterCount = new FileValidateDelimiterCount();
         Validatable<String[]> fileValidateTransport = new FileValidateTransport();
 
-        FileValidatorFactory factory = new FileValidatorFactory(List.of(fileValidateAvgSpeed, fileValidateDelimiterCount, fileValidateTransport), List.of("TransportStrategy"));
+        TransportFileValidatorFactory factory = new TransportFileValidatorFactory(List.of(fileValidateAvgSpeed, fileValidateDelimiterCount, fileValidateTransport), List.of("TransportStrategy"));
 
         List<Validatable<String[]>> result = factory.getValidators();
 
@@ -28,7 +28,7 @@ class FileValidatorFactoryTest {
         Validatable<String[]> fileValidateDelimiterCount = new FileValidateDelimiterCount();
         Validatable<String[]> fileValidateEmptyLine = new FileValidateEmptyLine();
 
-        FileValidatorFactory factory = new FileValidatorFactory(List.of(fileValidateAvgSpeed, fileValidateDelimiterCount, fileValidateEmptyLine), List.of("AvgSpeedStrategy", "DelimiterCountStrategy", "EmptyLineStrategy"));
+        TransportFileValidatorFactory factory = new TransportFileValidatorFactory(List.of(fileValidateAvgSpeed, fileValidateDelimiterCount, fileValidateEmptyLine), List.of("AvgSpeedStrategy", "DelimiterCountStrategy", "EmptyLineStrategy"));
 
         List<Validatable<String[]>> result = factory.getValidators();
 

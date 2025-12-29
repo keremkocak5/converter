@@ -28,7 +28,7 @@ public class ValidateIpService implements IpValidatable {
     public void saveIpDetailsAndRunIpValidationRules(ConversionLog conversionLog, String ip) {
         List<Validatable<IpDetails>> validators = ipValidatorFactory.getValidators();
         if (validators.size() == 1 && validators.stream().filter(validator -> VALIDATE_NOTHING_STRATEGY_KEY.equals(validator.getValidationKey())).findAny().isPresent()) {
-            return;
+            return; // do nothing here if VALIDATE_NOTHING_STRATEGY_KEY is set at properties, don't even call IP-API endpoint.
         }
         IpDetails ipDetails = ipApiClient
                 .getIpDetails(ip)
