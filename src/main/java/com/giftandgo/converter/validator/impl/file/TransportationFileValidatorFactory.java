@@ -11,7 +11,7 @@ import static com.giftandgo.converter.util.ValidatorUtil.filterAndSortValidators
 
 @RequiredArgsConstructor
 @Service
-public class FileValidatorFactory {
+public class TransportationFileValidatorFactory {
 
     private final List<Validatable<String[]>> validators;
 

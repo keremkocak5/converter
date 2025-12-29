@@ -7,7 +7,7 @@ import com.giftandgo.converter.model.OutcomeFile;
 import com.giftandgo.converter.service.FileReadable;
 import com.giftandgo.converter.util.FileReadWriteUtil;
 import com.giftandgo.converter.validator.Validatable;
-import com.giftandgo.converter.validator.impl.file.FileValidatorFactory;
+import com.giftandgo.converter.validator.impl.file.TransportationFileValidatorFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ import static com.giftandgo.converter.util.Constants.OUTCOME_FILE_NAME;
 @Slf4j
 class FileReaderService implements FileReadable<OutcomeFile> {
 
-    private final FileValidatorFactory fileValidatorFactory;
+    private final TransportationFileValidatorFactory transportationFileValidatorFactory;
 
     @Override
     public OutcomeFile getValidatedFileContent(MultipartFile file) {
@@ -45,7 +45,7 @@ class FileReaderService implements FileReadable<OutcomeFile> {
         AtomicInteger lineNumber = new AtomicInteger();
         for (String[] line : lines) {
             lineNumber.incrementAndGet();
-            fileValidatorFactory.getValidators()
+            transportationFileValidatorFactory.getValidators()
                     .stream()
                     .filter(validator -> !validator.isValid(line))
                     .findAny()
