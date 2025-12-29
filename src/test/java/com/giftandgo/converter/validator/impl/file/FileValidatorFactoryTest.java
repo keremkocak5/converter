@@ -22,6 +22,20 @@ class FileValidatorFactoryTest {
         assertThat(result).hasSize(1).containsExactly(fileValidateTransport);
     }
 
-    // kerem sortlamayi da test et
+    @Test
+    void getValidatorsShouldReturnValidatorsWhenSortingWorking() {
+        Validatable<String[]> fileValidateAvgSpeed = new FileValidateAvgSpeed();
+        Validatable<String[]> fileValidateDelimiterCount = new FileValidateDelimiterCount();
+        Validatable<String[]> fileValidateEmptyLine = new FileValidateEmptyLine();
+
+        FileValidatorFactory factory = new FileValidatorFactory(List.of(fileValidateAvgSpeed, fileValidateDelimiterCount, fileValidateEmptyLine), List.of("AvgSpeedStrategy", "DelimiterCountStrategy", "EmptyLineStrategy"));
+
+        List<Validatable<String[]>> result = factory.getValidators();
+
+        assertThat(result).hasSize(3);
+        assertThat(result.get(0).getValidationKey()).isEqualTo("EmptyLineStrategy");
+        assertThat(result.get(1).getValidationKey()).isEqualTo("DelimiterCountStrategy");
+        assertThat(result.get(2).getValidationKey()).isEqualTo("AvgSpeedStrategy");
+    }
 
 }

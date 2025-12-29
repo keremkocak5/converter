@@ -29,7 +29,7 @@ public class FileConverterController {
     private final FileConvertable fileConverterService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Convert a file and get output")
+    @Operation(summary = "Convert a file and return output file")
     public ResponseEntity<Resource> convertFile(@Valid @NonNull @RequestParam("file") MultipartFile file,
                                                 @Valid @NonNull HttpServletRequest request) {
         OutcomeFile outcomeFile = fileConverterService.convertFile(file, IpUtil.getClientIp(request), request.getRequestURI());
