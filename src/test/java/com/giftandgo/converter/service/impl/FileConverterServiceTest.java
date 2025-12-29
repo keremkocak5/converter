@@ -18,13 +18,13 @@ import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TransportationFileConverterServiceTest {
+class FileConverterServiceTest {
 
     private ConversionLogPersistable conversionLogService;
     private FileReadable<OutcomeFile> fileReaderService;
     private IpValidatable validateIpService;
 
-    private TransportationFileConverterService service;
+    private FileConverterService service;
 
     private MultipartFile file;
     private String ip;
@@ -38,7 +38,7 @@ class TransportationFileConverterServiceTest {
         fileReaderService = Mockito.mock(FileReadable.class);
         validateIpService = Mockito.mock(IpValidatable.class);
 
-        service = new TransportationFileConverterService(conversionLogService, fileReaderService, validateIpService);
+        service = new FileConverterService(conversionLogService, fileReaderService, validateIpService);
 
         file = Mockito.mock(MultipartFile.class);
         ip = "1.2.3.4";
