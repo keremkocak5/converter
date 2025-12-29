@@ -37,6 +37,15 @@ class FileValidateLikesTest {
     }
 
     @Test
+    void isValid_shouldReturnFalse_whenLikesNull() {
+        String[] content = new String[]{"a", "b", "c", null};
+
+        boolean result = validator.isValid(content);
+
+        assertFalse(result);
+    }
+
+    @Test
     void getErrorCode_shouldReturnInvalidLikes() {
         Optional<ErrorCode> errorCode = validator.getErrorCode();
 

@@ -38,7 +38,7 @@ class FileValidateTransportTest {
         String[] content = new String[7];
         content[4] = null;
 
-        assertThrows(NullPointerException.class, () -> validator.isValid(content));
+        assertFalse(validator.isValid(content));
     }
 
     @Test
