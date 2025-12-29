@@ -15,7 +15,7 @@ public class TransportFileValidatorFactory {
 
     private final List<Validatable<String[]>> validators;
 
-    @Value("${feature.flag.file.validation.strategies:[NoValidationStrategy]}")
+    @Value("${feature.flag.file.validation.strategies:[NoValidationStrategy]}") // kerem bunu bos array yap
     private final List<String> strategies;
 
     public List<Validatable<String[]>> getValidators() {

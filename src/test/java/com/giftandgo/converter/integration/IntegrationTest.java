@@ -117,7 +117,7 @@ public class IntegrationTest extends TestBase {
                 .then()
                 .statusCode(400)
                 .contentType("application/problem+json")
-                .body("detail", equalTo("ID not valid at line 2"))
+                .body("detail", equalTo("Id not valid at line 2"))
                 .body("errorCode", equalTo("I0022"));
     }
 

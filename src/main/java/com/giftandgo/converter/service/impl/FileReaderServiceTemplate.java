@@ -25,7 +25,7 @@ abstract class FileReaderServiceTemplate<T> implements FileReadable<OutcomeFile>
 
     abstract Pattern getDelimiterPattern();
 
-    abstract T mapLineToOutputContent(String[] delimitedPart);
+    abstract T getLineToOutputMapper(String[] delimitedPart);
 
     abstract String getFileName();
 
@@ -44,7 +44,7 @@ abstract class FileReaderServiceTemplate<T> implements FileReadable<OutcomeFile>
     private List<T> getParsedContent(List<String[]> delimitedParts) {
         try {
             return delimitedParts.stream()
-                    .map(this::mapLineToOutputContent)
+                    .map(this::getLineToOutputMapper)
                     .collect(Collectors.toList());
         } catch (Exception e) {
             log.error("Cannot read file.", e);

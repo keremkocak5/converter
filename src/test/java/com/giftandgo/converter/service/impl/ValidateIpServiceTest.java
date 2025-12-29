@@ -18,7 +18,7 @@ import java.util.Optional;
 import static com.giftandgo.converter.validator.impl.ip.IpValidateNothing.VALIDATE_NOTHING_STRATEGY_KEY;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ValidateIpServiceTest {
+class ValidateIpServiceTest { // kerem bunu elden gecir
 
     private IpDetailsRetrievable ipApiClient;
     private ConversionLogPersistable conversionLogService;

@@ -1,7 +1,7 @@
 package com.giftandgo.converter.service.impl;
 
 import com.giftandgo.converter.exception.ConverterRuntimeException;
-import com.giftandgo.converter.model.OutcomeContent;
+import com.giftandgo.converter.model.TransportOutcomeContent;
 import com.giftandgo.converter.validator.Validatable;
 import com.giftandgo.converter.validator.impl.file.TransportFileValidatorFactory;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import static com.giftandgo.converter.util.Constants.OUTCOME_FILE_NAME;
 
 @Service
 @RequiredArgsConstructor
-class TransportFileReaderService extends FileReaderServiceTemplate<OutcomeContent> {
+class TransportFileReaderService extends FileReaderServiceTemplate<TransportOutcomeContent> {
 
     private final TransportFileValidatorFactory transportFileValidatorFactory;
 
@@ -40,8 +40,8 @@ class TransportFileReaderService extends FileReaderServiceTemplate<OutcomeConten
     }
 
     @Override
-    OutcomeContent mapLineToOutputContent(String[] delimitedPart) {
-        return new OutcomeContent(
+    TransportOutcomeContent getLineToOutputMapper(String[] delimitedPart) {
+        return new TransportOutcomeContent(
                 delimitedPart[2],
                 delimitedPart[4],
                 Double.parseDouble(delimitedPart[6])
