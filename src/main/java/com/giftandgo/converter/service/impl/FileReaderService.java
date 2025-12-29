@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.giftandgo.converter.util.Constants.DELIMITER_PATTERN;
+import static com.giftandgo.converter.util.Constants.OUTCOME_FILE_NAME;
 
 
 @Service
@@ -36,7 +37,7 @@ class FileReaderService implements FileReadable<OutcomeFile> {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         FileReadWriteUtil.write(outputStream, getParsedContent(delimitedContents));
         return new OutcomeFile(
-                "OutcomeFile.json",
+                OUTCOME_FILE_NAME,
                 new ByteArrayInputStream(outputStream.toByteArray())
         );
     }

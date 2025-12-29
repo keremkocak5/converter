@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.giftandgo.converter.util.ValidatorUtil.filterAndSortValidators;
 
 @RequiredArgsConstructor
 @Service
@@ -19,11 +19,7 @@ public class FileValidatorFactory {
     private final List<String> strategies;
 
     public List<Validatable<String[]>> getValidators() {
-        return validators
-                .stream()
-                .sorted(Comparator.comparing(Validatable::getValidationPriority))
-                .filter(validator -> strategies.contains(validator.getValidationKey()))
-                .collect(Collectors.toList());
+        return filterAndSortValidators(validators, strategies);
     }
 
 }

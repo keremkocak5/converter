@@ -13,5 +13,6 @@ public class Constants {
     public static final Pattern DELIMITER_PATTERN = Pattern.compile(Pattern.quote(DELIMITER));
     public static final ObjectMapper SINGLETON_OBJECT_MAPPER = new ObjectMapper();
     public static final Function<Long, Long> TIME_LAPSED_MILLIS = (startMoment) -> (System.nanoTime() - startMoment) / 1_000_000;
+    public static final String OUTCOME_FILE_NAME = "OutcomeFile.json";
 
 }

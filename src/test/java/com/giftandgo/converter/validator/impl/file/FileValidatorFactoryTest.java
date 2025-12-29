@@ -17,7 +17,7 @@ class FileValidatorFactoryTest {
 
         FileValidatorFactory factory = new FileValidatorFactory(List.of(fileValidateAvgSpeed, fileValidateDelimiterCount, fileValidateTransport), List.of("TransportStrategy"));
 
-        List<Validatable<String[]>> result = factory.getValidators();
+        Object result = factory.getValidators();
 
         assertThat(result).hasSize(1).containsExactly(fileValidateTransport);
     }
@@ -30,7 +30,7 @@ class FileValidatorFactoryTest {
 
         FileValidatorFactory factory = new FileValidatorFactory(List.of(fileValidateAvgSpeed, fileValidateDelimiterCount, fileValidateEmptyLine), List.of("AvgSpeedStrategy", "DelimiterCountStrategy", "EmptyLineStrategy"));
 
-        List<Validatable<String[]>> result = factory.getValidators();
+        Object result = factory.getValidators();
 
         assertThat(result).hasSize(3);
         assertThat(result.get(0).getValidationKey()).isEqualTo("EmptyLineStrategy");

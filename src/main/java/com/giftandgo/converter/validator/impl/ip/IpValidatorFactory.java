@@ -6,10 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static com.giftandgo.converter.util.ValidatorUtil.filterAndSortValidators;
 import static com.giftandgo.converter.validator.impl.ip.IpValidateNothing.VALIDATE_NOTHING_STRATEGY_KEY;
 
 @RequiredArgsConstructor
@@ -22,12 +21,7 @@ public class IpValidatorFactory {
     private final List<String> strategies;
 
     public List<Validatable<IpDetails>> getValidators() {
-
-        return validators
-                .stream()
-                .sorted(Comparator.comparing(Validatable::getValidationPriority))
-                .filter(validator -> strategies.contains(validator.getValidationKey()))
-                .collect(Collectors.toList());
+        return filterAndSortValidators(validators, strategies);
     }
 
 }
