@@ -28,7 +28,7 @@ class FileValidateIDTest {
 
     @Test
     void isValid_shouldReturnFalse_whenIDIsInvalid() {
-        String[] content = new String[]{"any", "abcX123D456", "other"};
+        String[] content = new String[]{"any", "abcX123D456", "other", null};
 
         boolean result = validator.isValid(content);
 

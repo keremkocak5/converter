@@ -11,7 +11,7 @@ public class FileValidateDelimiterCount implements Validatable<String[]> {
 
     @Override
     public boolean isValid(String[] content) {
-        return content.length == 7;
+        return content != null && content.length == 7;
     }
 
     @Override

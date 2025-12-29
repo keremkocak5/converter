@@ -15,7 +15,7 @@ public class FileValidateUUID implements Validatable<String[]> {
         try {
             UUID.fromString(content[0]);
             return true;
-        } catch (IllegalArgumentException exception) {
+        } catch (Exception exception) {
             return false;
         }
     }

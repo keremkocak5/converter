@@ -14,7 +14,7 @@ public class FileValidateID implements Validatable<String[]> {
 
     @Override
     public boolean isValid(String[] content) {
-        return ID_PATTERN.matcher(content[1]).matches();
+        return content[1] != null && ID_PATTERN.matcher(content[1]).matches();
     }
 
     @Override

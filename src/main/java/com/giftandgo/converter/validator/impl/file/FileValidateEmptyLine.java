@@ -11,7 +11,7 @@ public class FileValidateEmptyLine implements Validatable<String[]> {
 
     @Override
     public boolean isValid(String[] content) {
-        return content.length != 0;
+        return content != null && content.length != 0;
     }
 
     @Override

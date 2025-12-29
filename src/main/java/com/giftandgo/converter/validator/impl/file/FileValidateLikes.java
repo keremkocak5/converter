@@ -11,7 +11,7 @@ public class FileValidateLikes implements Validatable<String[]> {
 
     @Override
     public boolean isValid(String[] content) {
-        return content[3].length() < 100;
+        return content[3] != null && content[3].length() < 100;
     }
 
     @Override

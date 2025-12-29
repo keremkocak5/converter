@@ -14,7 +14,7 @@ public class FileValidateTopSpeed implements Validatable<String[]> {
         try {
             Double.parseDouble(content[6]);
             return true;
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             return false;
         }
     }

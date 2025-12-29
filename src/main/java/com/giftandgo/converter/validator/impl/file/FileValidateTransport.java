@@ -11,7 +11,7 @@ public class FileValidateTransport implements Validatable<String[]> {
 
     @Override
     public boolean isValid(String[] content) {
-        return content[4].length() < 100;
+        return content[4] != null && content[4].length() < 100;
     }
 
     @Override
