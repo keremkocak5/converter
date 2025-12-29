@@ -1,6 +1,5 @@
 package com.giftandgo.converter.integration;
 
-
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import io.restassured.RestAssured;
 import org.junit.Before;
@@ -25,6 +24,5 @@ public class TestBase {
         RestAssured.baseURI = "http://localhost:8080";
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
-
 
 }
