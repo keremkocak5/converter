@@ -1,9 +1,10 @@
 package com.giftandgo.converter.model;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.lang.NonNull;
 
-public record OutcomeContent(@NonNull @NotEmpty String name,
+public record OutcomeContent(@Valid @NonNull @NotEmpty String name,
                              String transport,
                              double topSpeed) {
 }

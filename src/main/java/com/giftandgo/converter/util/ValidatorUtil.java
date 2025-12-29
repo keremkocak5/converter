@@ -14,8 +14,8 @@ public class ValidatorUtil {
             List<Validatable<T>> validators,
             List<K> strategies) {
         return validators.stream()
-                .sorted(Comparator.comparing(Validatable::getValidationPriority))
                 .filter(validator -> strategies.contains(validator.getValidationKey()))
+                .sorted(Comparator.comparing(Validatable::getValidationPriority))
                 .collect(Collectors.toList());
     }
 

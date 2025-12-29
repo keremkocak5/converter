@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 import static com.giftandgo.converter.util.Constants.DELIMITER_PATTERN;
 import static com.giftandgo.converter.util.Constants.OUTCOME_FILE_NAME;
 
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -32,23 +31,23 @@ class FileReaderService implements FileReadable<OutcomeFile> {
 
     @Override
     public OutcomeFile getValidatedFileContent(MultipartFile file) {
-        List<String[]> delimitedContents = getDelimitedContent(file);
-        validateContent(delimitedContents);
+        List<String[]> lines = getDelimitedContent(file);
+        validateContent(lines);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        FileReadWriteUtil.write(outputStream, getParsedContent(delimitedContents));
+        FileReadWriteUtil.write(outputStream, getParsedContent(lines));
         return new OutcomeFile(
                 OUTCOME_FILE_NAME,
                 new ByteArrayInputStream(outputStream.toByteArray())
         );
     }
 
-    private void validateContent(List<String[]> delimitedContents) {
+    private void validateContent(List<String[]> lines) {
         AtomicInteger lineNumber = new AtomicInteger();
-        for (String[] delimitedContent : delimitedContents) {
+        for (String[] line : lines) {
             lineNumber.incrementAndGet();
             fileValidatorFactory.getValidators()
                     .stream()
-                    .filter(validator -> !validator.isValid(delimitedContent))
+                    .filter(validator -> !validator.isValid(line))
                     .findAny()
                     .flatMap(Validatable::getErrorCode)
                     .ifPresent(errorCode -> {
