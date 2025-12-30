@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileConverterServiceTest {
 
     private ConversionLogPersistable conversionLogService;
-    private FileReadable<OutcomeFile> fileReaderService;
+    private FileReadable fileReaderService;
     private IpValidatable validateIpService;
 
     private FileConverterService service;
@@ -48,7 +48,6 @@ class FileConverterServiceTest {
 
         Mockito.when(conversionLogService.create(uri, ip)).thenReturn(conversionLog);
         Mockito.when(fileReaderService.getValidatedFileContent(file)).thenReturn(outcomeFile);
-        Mockito.when(conversionLogService.update(conversionLog)).thenReturn(conversionLog);
     }
 
     @Test

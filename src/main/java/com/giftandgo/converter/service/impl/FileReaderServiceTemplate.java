@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-abstract class FileReaderServiceTemplate<T> implements FileReadable<OutcomeFile> {
+abstract class FileReaderServiceTemplate<T> implements FileReadable {
 
     abstract void validateContent(List<String[]> lines);
 

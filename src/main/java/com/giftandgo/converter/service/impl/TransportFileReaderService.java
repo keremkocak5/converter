@@ -11,14 +11,15 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
-import static com.giftandgo.converter.util.Constants.DELIMITER_PATTERN;
-import static com.giftandgo.converter.util.Constants.OUTCOME_FILE_NAME;
-
 @Service
 @RequiredArgsConstructor
 class TransportFileReaderService extends FileReaderServiceTemplate<TransportOutcomeContent> {
 
     private final TransportFileValidatorFactory transportFileValidatorFactory;
+
+    private static final String DELIMITER = "|";
+    public static final Pattern DELIMITER_PATTERN = Pattern.compile(Pattern.quote(DELIMITER));
+    public static final String OUTCOME_FILE_NAME = "OutcomeFile.json";
 
     @Override
     void validateContent(List<String[]> lines) {

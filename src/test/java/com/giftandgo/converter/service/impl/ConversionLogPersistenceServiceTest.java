@@ -45,11 +45,8 @@ class ConversionLogPersistenceServiceTest {
     void updateShouldSaveAndReturnConversionLog() {
         when(repository.save(new ConversionLog("testUri", "127.0.0.1"))).thenReturn(conversionLog);
 
-        ConversionLog result = service.update(conversionLog);
+        service.update(conversionLog);
 
-        assertNotNull(result);
-        assertEquals("testUri", result.getUri());
-        assertEquals("127.0.0.1", result.getIp());
         verify(repository, times(1)).save(conversionLog);
     }
 }

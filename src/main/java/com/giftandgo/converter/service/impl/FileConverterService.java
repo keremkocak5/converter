@@ -20,7 +20,7 @@ import static com.giftandgo.converter.util.Constants.TIME_LAPSED_MILLIS;
 public class FileConverterService implements FileConvertable {
 
     private final ConversionLogPersistable conversionLogService;
-    private final FileReadable<OutcomeFile> fileReaderService;
+    private final FileReadable fileReaderService;
     private final IpValidatable validateIpService;
 
     @Override

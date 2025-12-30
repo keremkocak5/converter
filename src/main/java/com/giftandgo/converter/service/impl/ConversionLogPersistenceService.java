@@ -21,8 +21,8 @@ public class ConversionLogPersistenceService implements ConversionLogPersistable
 
     @Override
     @Transactional(noRollbackFor = Exception.class)
-    public ConversionLog update(ConversionLog conversionLog) {
-        return conversionLogRepository.save(conversionLog);
+    public void update(ConversionLog conversionLog) {
+        conversionLogRepository.save(conversionLog);
     }
 
 }

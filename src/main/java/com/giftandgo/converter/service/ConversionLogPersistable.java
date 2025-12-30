@@ -6,6 +6,6 @@ public interface ConversionLogPersistable {
 
     ConversionLog create(String uri, String ip);
 
-    ConversionLog update(ConversionLog conversionLog);
+    void update(ConversionLog conversionLog);
 
 }
