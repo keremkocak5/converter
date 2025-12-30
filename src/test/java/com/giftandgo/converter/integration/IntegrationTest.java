@@ -1,5 +1,7 @@
 package com.giftandgo.converter.integration;
 
+import io.restassured.RestAssured;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,8 +18,16 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = {
+        "server.port=8081",
+        "server.servlet.context-path=/converter"
+})
 public class IntegrationTest extends TestBase {
+
+    @BeforeClass
+    public static void setup() {
+        RestAssured.port = 8081;
+    }
 
     @Test
     public void shouldSucceedWhenFileDoesNotHaveErrors() {

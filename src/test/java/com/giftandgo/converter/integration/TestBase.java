@@ -21,7 +21,7 @@ public class TestBase {
                                 .withHeader("Content-Type", "application/json")
                                 .withBody("{status: 'ok'}")));
 
-        RestAssured.baseURI = "http://localhost:8080";
+        RestAssured.baseURI = "http://localhost:8081";
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
 
