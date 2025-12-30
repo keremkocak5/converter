@@ -15,7 +15,6 @@ import org.mockito.Mockito;
 import java.util.List;
 import java.util.Optional;
 
-import static com.giftandgo.converter.validator.impl.ip.IpValidateNothing.VALIDATE_NOTHING_STRATEGY_KEY;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ValidateIpServiceTest { // kerem bunu elden gecir
@@ -43,25 +42,6 @@ class ValidateIpServiceTest { // kerem bunu elden gecir
         conversionLog = Mockito.mock(ConversionLog.class);
         Mockito.when(conversionLog.setIpDetails(Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(conversionLog);
-    }
-
-    // ------------------------------------------------------
-    // 1. ValidateNothingStrategy → skip validation entirely
-    // ------------------------------------------------------
-
-    @Test
-    void shouldSkipValidationWhenValidateNothingStrategyIsUsed() {
-        Validatable<IpDetails> validateNothing = Mockito.mock(Validatable.class);
-        Mockito.when(validateNothing.getValidationKey())
-                .thenReturn(VALIDATE_NOTHING_STRATEGY_KEY);
-
-        Mockito.when(ipValidatorFactory.getValidators())
-                .thenReturn(List.of(validateNothing));
-
-        service.saveIpDetailsAndRunIpValidationRules(conversionLog, "1.2.3.4");
-
-        Mockito.verifyNoInteractions(ipApiClient);
-        Mockito.verifyNoInteractions(conversionLogService);
     }
 
     // ------------------------------------------------------

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.giftandgo.converter.util.ValidatorUtil.filterAndSortValidators;
-import static com.giftandgo.converter.validator.impl.ip.IpValidateNothing.VALIDATE_NOTHING_STRATEGY_KEY;
 
 @RequiredArgsConstructor
 @Service
@@ -17,7 +16,7 @@ public class IpValidatorFactory {
 
     private final List<Validatable<IpDetails>> validators;
 
-    @Value("${feature.flag.ip.validation.strategies:" + VALIDATE_NOTHING_STRATEGY_KEY + "}")
+    @Value("${feature.flag.ip.validation.strategies:[]}")
     private final List<String> strategies;
 
     public List<Validatable<IpDetails>> getValidators() {

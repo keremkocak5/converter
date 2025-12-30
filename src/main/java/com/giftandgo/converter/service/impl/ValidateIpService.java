@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.giftandgo.converter.validator.impl.ip.IpValidateNothing.VALIDATE_NOTHING_STRATEGY_KEY;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +26,8 @@ public class ValidateIpService implements IpValidatable {
     @Override
     public void saveIpDetailsAndRunIpValidationRules(ConversionLog conversionLog, String ip) {
         List<Validatable<IpDetails>> validators = ipValidatorFactory.getValidators();
-        if (validators.size() == 1 && validators.stream().filter(validator -> VALIDATE_NOTHING_STRATEGY_KEY.equals(validator.getValidationKey())).findAny().isPresent()) {
-            return; // do nothing here if VALIDATE_NOTHING_STRATEGY_KEY is set at properties, don't even call IP-API endpoint.
+        if (validators.size() == 0) {
+            return; // do nothing here if there are no validations.
         }
         IpDetails ipDetails = ipApiClient
                 .getIpDetails(ip)
