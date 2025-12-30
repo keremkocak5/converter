@@ -31,7 +31,7 @@ abstract class FileReaderServiceTemplate<T> implements FileReadable {
 
     @Override
     public OutcomeFile getValidatedFileContent(MultipartFile file) {
-        List<String[]> lines = getDelimitedContent(file);
+        List<String[]> lines = getDelimitedLines(file);
         validateContent(lines);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         FileReadWriteUtil.write(outputStream, getParsedContent(lines));
@@ -47,20 +47,20 @@ abstract class FileReaderServiceTemplate<T> implements FileReadable {
                     .map(this::getLineToOutputMapper)
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            log.error("Cannot read file.", e);
+            log.error("Cannot parse file.", e);
             throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);
         }
     }
 
-    private List<String[]> getDelimitedContent(MultipartFile file) {
+    private List<String[]> getDelimitedLines(MultipartFile file) {
         try {
             return FileReadWriteUtil.read(
                     file.getInputStream(),
                     getDelimiterPattern()
             );
         } catch (Exception e) {
-            log.error("Cannot write file.", e);
-            throw new ConverterRuntimeException(ErrorCode.CANNOT_WRITE_FILE);
+            log.error("Cannot categorize file.", e);
+            throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);
         }
     }
 }

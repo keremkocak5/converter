@@ -12,7 +12,6 @@ public enum ErrorCode {
     RESTRICTED_COUNTRY("I0002", "Country is restricted.", HttpStatus.FORBIDDEN),
     IP_API_CONNECTION_ERROR("I0010", "Could not connect to IP-API.", HttpStatus.INTERNAL_SERVER_ERROR),
     IP_API_RESOLVE_ERROR("I0011", "IP API could not resolve arguments.", HttpStatus.INTERNAL_SERVER_ERROR),
-    INVALID_FILE_FORMAT("I0012", "Invalid file format.", HttpStatus.BAD_REQUEST),
     CANNOT_READ_FILE("I0013", "Cannot read file.", HttpStatus.BAD_REQUEST),
     CANNOT_WRITE_FILE("I0014", "Cannot write file.", HttpStatus.INTERNAL_SERVER_ERROR),
     INCORRECT_DELIMITERS("I0020", "Delimiters not correct at line %d", HttpStatus.BAD_REQUEST),
