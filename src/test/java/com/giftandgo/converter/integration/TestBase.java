@@ -18,6 +18,7 @@ public class TestBase {
     public void init() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
 
+        // success - ok
         mockRule.stubFor(
                 get(urlPathEqualTo("/json/1.1.1.1"))
                         .atPriority(10)
@@ -26,6 +27,7 @@ public class TestBase {
                                 .withBody(objectMapper.writeValueAsString(new IpApiResponse("success", "UK", "SOMEISP", ""))))
         );
 
+        // invalid country
         mockRule.stubFor(
                 get(urlPathEqualTo("/json/2.2.2.2"))
                         .atPriority(10)
@@ -34,6 +36,7 @@ public class TestBase {
                                 .withBody(objectMapper.writeValueAsString(new IpApiResponse("success", "CA", "SOMEISP", ""))))
         );
 
+        // invalid isp
         mockRule.stubFor(
                 get(urlPathEqualTo("/json/3.3.3.3"))
                         .atPriority(10)
@@ -42,12 +45,22 @@ public class TestBase {
                                 .withBody(objectMapper.writeValueAsString(new IpApiResponse("success", "UK", "AZURE", ""))))
         );
 
+        // invalid status
         mockRule.stubFor(
                 get(urlPathEqualTo("/json/4.4.4.4"))
                         .atPriority(10)
                         .willReturn(ok()
                                 .withHeader("Content-Type", "application/json")
                                 .withBody(objectMapper.writeValueAsString(new IpApiResponse("failure", "", "", "bad news"))))
+        );
+
+        // success, but null country
+        mockRule.stubFor(
+                get(urlPathEqualTo("/json/5.5.5.5"))
+                        .atPriority(10)
+                        .willReturn(ok()
+                                .withHeader("Content-Type", "application/json")
+                                .withBody(objectMapper.writeValueAsString(new IpApiResponse("success", null, "AZURE", ""))))
         );
 
         RestAssured.baseURI = "http://localhost:8081";

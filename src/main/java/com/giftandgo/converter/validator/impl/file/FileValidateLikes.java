@@ -2,6 +2,7 @@ package com.giftandgo.converter.validator.impl.file;
 
 import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.validator.Validatable;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,7 +12,7 @@ public class FileValidateLikes implements Validatable<String[]> {
 
     @Override
     public boolean isValid(String[] content) {
-        return content[3] != null && content[3].length() < 100;
+        return StringUtils.isNotEmpty(content[3]) && content[3].length() < 100;
     }
 
     @Override

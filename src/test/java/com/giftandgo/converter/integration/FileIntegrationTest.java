@@ -116,6 +116,106 @@ public class FileIntegrationTest extends TestBase {
                 .body("errorCode", equalTo("I0022"));
     }
 
+    @Test
+    public void shouldNotSucceedWhenAvgSpeedInvalid() {
+        given()
+                .header("X-Forwarded-For", "1.1.1.1")
+                .multiPart(
+                        "file",
+                        "input.txt",
+                        readFile("transport-avg-speed-invalid-file.txt"),
+                        MediaType.TEXT_PLAIN_VALUE
+                )
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .when()
+                .post("/converter/v1/file")
+                .then()
+                .statusCode(400)
+                .contentType("application/problem+json")
+                .body("detail", equalTo("Average speed not valid at line 1"))
+                .body("errorCode", equalTo("I0026"));
+    }
+
+    @Test
+    public void shouldNotSucceedWhenLikeInvalid() {
+        given()
+                .header("X-Forwarded-For", "1.1.1.1")
+                .multiPart(
+                        "file",
+                        "input.txt",
+                        readFile("transport-like-invalid-file.txt"),
+                        MediaType.TEXT_PLAIN_VALUE
+                )
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .when()
+                .post("/converter/v1/file")
+                .then()
+                .statusCode(400)
+                .contentType("application/problem+json")
+                .body("detail", equalTo("Likes not valid at line 3"))
+                .body("errorCode", equalTo("I0024"));
+    }
+
+    @Test
+    public void shouldNotSucceedWhenMaxSpeedInvalid() {
+        given()
+                .header("X-Forwarded-For", "1.1.1.1")
+                .multiPart(
+                        "file",
+                        "input.txt",
+                        readFile("transport-max-speed-invalid-file.txt"),
+                        MediaType.TEXT_PLAIN_VALUE
+                )
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .when()
+                .post("/converter/v1/file")
+                .then()
+                .statusCode(400)
+                .contentType("application/problem+json")
+                .body("detail", equalTo("Top speed not valid at line 3"))
+                .body("errorCode", equalTo("I0027"));
+    }
+
+    @Test
+    public void shouldNotSucceedWhenNameInvalid() {
+        given()
+                .header("X-Forwarded-For", "1.1.1.1")
+                .multiPart(
+                        "file",
+                        "input.txt",
+                        readFile("transport-name-invalid-file.txt"),
+                        MediaType.TEXT_PLAIN_VALUE
+                )
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .when()
+                .post("/converter/v1/file")
+                .then()
+                .statusCode(400)
+                .contentType("application/problem+json")
+                .body("detail", equalTo("Name not valid at line 1"))
+                .body("errorCode", equalTo("I0023"));
+    }
+
+    @Test
+    public void shouldNotSucceedWhenTransportInvalid() {
+        given()
+                .header("X-Forwarded-For", "1.1.1.1")
+                .multiPart(
+                        "file",
+                        "input.txt",
+                        readFile("transport-transport-invalid-file.txt"),
+                        MediaType.TEXT_PLAIN_VALUE
+                )
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .when()
+                .post("/converter/v1/file")
+                .then()
+                .statusCode(400)
+                .contentType("application/problem+json")
+                .body("detail", equalTo("Transport not valid at line 2"))
+                .body("errorCode", equalTo("I0025"));
+    }
+
     private static byte[] readFile(String filename) {
         byte[] fileContent;
         try {

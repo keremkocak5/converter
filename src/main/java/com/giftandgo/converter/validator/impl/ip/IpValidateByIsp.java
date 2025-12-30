@@ -19,7 +19,7 @@ public class IpValidateByIsp implements Validatable<IpDetails> {
 
     @Override
     public boolean isValid(IpDetails ipDetails) {
-        return !restrictedIsps.contains(ipDetails.countryCode());
+        return !restrictedIsps.contains(ipDetails.isp());
     }
 
     @Override
