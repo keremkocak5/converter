@@ -11,7 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -23,8 +22,6 @@ public class FileIntegrationTest extends TestBase {
 
     @Test
     public void shouldSucceedWhenFileDoesNotHaveErrors() {
-        stubFor(get(urlMatching("/json")).willReturn(okJson("{\"status\":\"ok\"}")));
-
         given()
                 .header("X-Forwarded-For", "1.1.1.1")
                 .multiPart(
@@ -45,8 +42,6 @@ public class FileIntegrationTest extends TestBase {
 
     @Test
     public void shouldSucceedWhenFileDoesNotHaveErrorsButEmptyLine() {
-        stubFor(get(urlMatching("/json")).willReturn(okJson("{\"status\":\"ok\"}")));
-
         given()
                 .header("X-Forwarded-For", "1.1.1.1")
                 .multiPart(
@@ -62,11 +57,9 @@ public class FileIntegrationTest extends TestBase {
                 .statusCode(200)
                 .header("Content-Disposition", notNullValue());
     }
-    
+
     @Test
     public void shouldSucceedWhenFileDoesNotHaveErrorsButEmptyFile() {
-        stubFor(get(urlMatching("/json")).willReturn(okJson("{\"status\":\"ok\"}")));
-
         given()
                 .header("X-Forwarded-For", "1.1.1.1")
                 .multiPart(
@@ -85,8 +78,6 @@ public class FileIntegrationTest extends TestBase {
 
     @Test
     public void shouldNotSucceedWhenUUIDInvalid() {
-        stubFor(get(urlMatching("/json")).willReturn(okJson("{\"status\":\"ok\"}")));
-
         given()
                 .header("X-Forwarded-For", "1.1.1.1")
                 .multiPart(
@@ -107,8 +98,6 @@ public class FileIntegrationTest extends TestBase {
 
     @Test
     public void shouldNotSucceedWhenIDInvalid() {
-        stubFor(get(urlMatching("/json")).willReturn(okJson("{\"status\":\"ok\"}")));
-
         given()
                 .header("X-Forwarded-For", "1.1.1.1")
                 .multiPart(
