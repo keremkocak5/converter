@@ -63,6 +63,15 @@ public class TestBase {
                                 .withBody(objectMapper.writeValueAsString(new IpApiResponse("success", null, "AZURE", ""))))
         );
 
+        // connection fail
+        mockRule.stubFor(
+                get(urlPathEqualTo("/json/6.6.6.6"))
+                        .atPriority(10)
+                        .willReturn(forbidden()
+                                .withHeader("Content-Type", "application/json")
+                                .withBody(objectMapper.writeValueAsString(new IpApiResponse("success", null, "AZURE", ""))))
+        );
+
         RestAssured.baseURI = "http://localhost:8081";
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }

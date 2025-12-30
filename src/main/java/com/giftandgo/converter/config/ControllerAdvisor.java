@@ -20,6 +20,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 e.getMessage()
         );
         problemDetail.setProperty("errorCode", e.getErrorCode().getErrorCode());
+        problemDetail.setProperty("title", e.getErrorCode().getErrorMessage());
         return problemDetail;
     }
 

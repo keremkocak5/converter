@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("wiremock")
-public class FileIntegrationTest extends TestBase {
+public class FileValidationIntegrationTest extends TestBase {
 
     @Test
     public void shouldSucceedWhenFileDoesNotHaveErrors() {
