@@ -1,12 +1,11 @@
 package com.giftandgo.converter.integration;
 
-import io.restassured.RestAssured;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
@@ -18,22 +17,16 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = {
-        "server.port=8081",
-        "server.servlet.context-path=/converter"
-})
-public class IntegrationTest extends TestBase {
-
-    @BeforeClass
-    public static void setup() {
-        RestAssured.port = 8081;
-    }
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@ActiveProfiles("wiremock")
+public class FileIntegrationTest extends TestBase {
 
     @Test
     public void shouldSucceedWhenFileDoesNotHaveErrors() {
         stubFor(get(urlMatching("/json")).willReturn(okJson("{\"status\":\"ok\"}")));
 
         given()
+                .header("X-Forwarded-For", "1.1.1.1")
                 .multiPart(
                         "file",
                         "input.txt",
@@ -55,6 +48,7 @@ public class IntegrationTest extends TestBase {
         stubFor(get(urlMatching("/json")).willReturn(okJson("{\"status\":\"ok\"}")));
 
         given()
+                .header("X-Forwarded-For", "1.1.1.1")
                 .multiPart(
                         "file",
                         "input.txt",
@@ -68,13 +62,13 @@ public class IntegrationTest extends TestBase {
                 .statusCode(200)
                 .header("Content-Disposition", notNullValue());
     }
-
-
+    
     @Test
     public void shouldSucceedWhenFileDoesNotHaveErrorsButEmptyFile() {
         stubFor(get(urlMatching("/json")).willReturn(okJson("{\"status\":\"ok\"}")));
 
         given()
+                .header("X-Forwarded-For", "1.1.1.1")
                 .multiPart(
                         "file",
                         "input.txt",
@@ -94,6 +88,7 @@ public class IntegrationTest extends TestBase {
         stubFor(get(urlMatching("/json")).willReturn(okJson("{\"status\":\"ok\"}")));
 
         given()
+                .header("X-Forwarded-For", "1.1.1.1")
                 .multiPart(
                         "file",
                         "input.txt",
@@ -115,6 +110,7 @@ public class IntegrationTest extends TestBase {
         stubFor(get(urlMatching("/json")).willReturn(okJson("{\"status\":\"ok\"}")));
 
         given()
+                .header("X-Forwarded-For", "1.1.1.1")
                 .multiPart(
                         "file",
                         "input.txt",
