@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
 
 import java.util.function.Function;
-import java.util.regex.Pattern;
 
 @UtilityClass
 public class Constants {
