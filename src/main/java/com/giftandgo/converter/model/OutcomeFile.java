@@ -6,8 +6,6 @@ import org.springframework.lang.NonNull;
 
 import java.io.InputStream;
 
-public record OutcomeFile(
-        @Valid @NonNull @NotEmpty String fileName,
-        @Valid @NonNull @NotEmpty InputStream inputStream
-) {
+public record OutcomeFile(@Valid @NonNull @NotEmpty String fileName,
+                          @Valid @NonNull @NotEmpty InputStream inputStream) {
 }

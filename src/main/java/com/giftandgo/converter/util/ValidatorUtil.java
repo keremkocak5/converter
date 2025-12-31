@@ -10,9 +10,7 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class ValidatorUtil {
 
-    public static <T, K> List<Validatable<T>> filterAndSortValidators(
-            List<Validatable<T>> validators,
-            List<K> strategies) {
+    public static <T, K> List<Validatable<T>> filterAndSortValidators(List<Validatable<T>> validators, List<K> strategies) {
         return validators.stream()
                 .filter(validator -> strategies.contains(validator.getValidationKey()))
                 .sorted(Comparator.comparing(Validatable::getValidationPriority))

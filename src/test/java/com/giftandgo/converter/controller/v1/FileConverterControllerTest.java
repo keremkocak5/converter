@@ -1,5 +1,6 @@
 package com.giftandgo.converter.controller.v1;
 
+import com.giftandgo.converter.config.ControllerAdvisor;
 import com.giftandgo.converter.model.OutcomeFile;
 import com.giftandgo.converter.service.FileConvertable;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
+import static com.giftandgo.converter.util.Constants.MAX_FILE_SIZE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -35,7 +37,7 @@ class FileConverterControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(new ControllerAdvisor()).build();
     }
 
     @Test
@@ -53,7 +55,6 @@ class FileConverterControllerTest {
                 .andExpect(result -> {
                     byte[] responseBytes = result.getResponse().getContentAsByteArray();
                     String responseString = new String(responseBytes, StandardCharsets.UTF_8);
-                    System.out.println("xx" + responseString);
                     assert responseString.contains("{\"status\":\"ok\"}");
                 });
     }
@@ -63,4 +64,20 @@ class FileConverterControllerTest {
         mockMvc.perform(multipart("/v1/file"))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void convertFileShouldFailWhenFileTooLarge() throws Exception {
+        byte[] largeContent = new byte[(int) (MAX_FILE_SIZE + 1)];
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "large.txt",
+                MediaType.TEXT_PLAIN_VALUE,
+                largeContent
+        );
+
+        mockMvc.perform(multipart("/v1/file").file(file))
+                .andExpect(status().isBadRequest());
+    }
+
 }
