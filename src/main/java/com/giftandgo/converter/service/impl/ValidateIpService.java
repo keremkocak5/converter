@@ -27,7 +27,7 @@ public class ValidateIpService implements IpValidatable {
     public void saveIpDetailsAndRunIpValidationRules(ConversionLog conversionLog, String ip) {
         List<Validatable<IpDetails>> validators = ipValidatorFactory.getValidators();
         if (validators.size() == 0) {
-            return; // do nothing here if there are no validations.
+            return; // do not call api if no validators are set.
         }
         IpDetails ipDetails = ipApiClient
                 .getIpDetails(ip)

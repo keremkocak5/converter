@@ -2,7 +2,7 @@ package com.giftandgo.converter.controller.v1;
 
 import com.giftandgo.converter.config.ControllerAdvisor;
 import com.giftandgo.converter.model.OutcomeFile;
-import com.giftandgo.converter.service.FileConvertable;
+import com.giftandgo.converter.service.FileConvertible;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class FileConverterControllerTest {
 
     @Mock
-    private FileConvertable fileConverterService;
+    private FileConvertible fileConverterService;
 
     @InjectMocks
     private FileConverterController controller;

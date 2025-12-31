@@ -3,7 +3,7 @@ package com.giftandgo.converter.controller.v1;
 import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.OutcomeFile;
-import com.giftandgo.converter.service.FileConvertable;
+import com.giftandgo.converter.service.FileConvertible;
 import com.giftandgo.converter.util.IpUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ import static com.giftandgo.converter.util.Constants.MAX_FILE_SIZE;
 @Validated
 public class FileConverterController {
 
-    private final FileConvertable fileConverterService;
+    private final FileConvertible fileConverterService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Convert a file and return output file")

@@ -4,7 +4,7 @@ import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.ConversionLog;
 import com.giftandgo.converter.model.OutcomeFile;
 import com.giftandgo.converter.service.ConversionLogPersistable;
-import com.giftandgo.converter.service.FileConvertable;
+import com.giftandgo.converter.service.FileConvertible;
 import com.giftandgo.converter.service.FileReadable;
 import com.giftandgo.converter.service.IpValidatable;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import static com.giftandgo.converter.util.Constants.TIME_LAPSED_MILLIS;
 
 @RequiredArgsConstructor
 @Service
-public class FileConverterService implements FileConvertable {
+public class FileConverterService implements FileConvertible {
 
     private final ConversionLogPersistable conversionLogService;
     private final FileReadable fileReaderService;
