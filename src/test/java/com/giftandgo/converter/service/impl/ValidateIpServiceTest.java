@@ -10,28 +10,27 @@ import com.giftandgo.converter.validator.Validatable;
 import com.giftandgo.converter.validator.impl.ip.IpValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-class ValidateIpServiceTest { // kerem bunu elden gecir
+class ValidateIpServiceTest {
 
     private IpDetailsRetrievable ipApiClient;
     private ConversionLogPersistable conversionLogService;
     private IpValidatorFactory ipValidatorFactory;
 
     private ValidateIpService service;
-
     private ConversionLog conversionLog;
 
     @BeforeEach
     void setUp() {
-        ipApiClient = Mockito.mock(IpDetailsRetrievable.class);
-        conversionLogService = Mockito.mock(ConversionLogPersistable.class);
-        ipValidatorFactory = Mockito.mock(IpValidatorFactory.class);
+        ipApiClient = mock(IpDetailsRetrievable.class);
+        conversionLogService = mock(ConversionLogPersistable.class);
+        ipValidatorFactory = mock(IpValidatorFactory.class);
 
         service = new ValidateIpService(
                 ipApiClient,
@@ -39,24 +38,40 @@ class ValidateIpServiceTest { // kerem bunu elden gecir
                 ipValidatorFactory
         );
 
-        conversionLog = Mockito.mock(ConversionLog.class);
-        Mockito.when(conversionLog.setIpDetails(Mockito.anyString(), Mockito.anyString()))
+        conversionLog = mock(ConversionLog.class);
+        when(conversionLog.setIpDetails(anyString(), anyString()))
                 .thenReturn(conversionLog);
     }
 
-    // ------------------------------------------------------
-    // 2. IP API returns empty → IP_API_RESOLVE_ERROR
-    // ------------------------------------------------------
+    // =========================
+    // NO VALIDATORS
+    // =========================
+
+    @Test
+    void shouldDoNothingWhenNoValidatorsConfigured() {
+        when(ipValidatorFactory.getValidators())
+                .thenReturn(List.of());
+
+        assertDoesNotThrow(() ->
+                service.saveIpDetailsAndRunIpValidationRules(conversionLog, "1.2.3.4")
+        );
+
+        verifyNoInteractions(ipApiClient);
+        verifyNoInteractions(conversionLogService);
+    }
+
+    // =========================
+    // IP API FAILS
+    // =========================
 
     @Test
     void shouldThrowWhenIpApiCannotResolveIp() {
-        Validatable<IpDetails> validator = Mockito.mock(Validatable.class);
-        Mockito.when(validator.getValidationKey()).thenReturn("SomeStrategy");
+        Validatable<IpDetails> validator = mock(Validatable.class);
 
-        Mockito.when(ipValidatorFactory.getValidators())
+        when(ipValidatorFactory.getValidators())
                 .thenReturn(List.of(validator));
 
-        Mockito.when(ipApiClient.getIpDetails("1.2.3.4"))
+        when(ipApiClient.getIpDetails("1.2.3.4"))
                 .thenReturn(Optional.empty());
 
         ConverterRuntimeException ex = assertThrows(
@@ -65,26 +80,26 @@ class ValidateIpServiceTest { // kerem bunu elden gecir
         );
 
         assertEquals(ErrorCode.IP_API_RESOLVE_ERROR, ex.getErrorCode());
+        verify(conversionLogService, never()).update(any());
     }
 
-    // ------------------------------------------------------
-    // 3. Validator blocks IP → corresponding error thrown
-    // ------------------------------------------------------
+    // =========================
+    // VALIDATOR FAILS
+    // =========================
 
     @Test
     void shouldThrowWhenIpValidationRuleFails() {
         IpDetails ipDetails = new IpDetails("US", "AWS");
 
-        Validatable<IpDetails> failingValidator = Mockito.mock(Validatable.class);
-        Mockito.when(failingValidator.getValidationKey()).thenReturn("ValidateISP");
-        Mockito.when(failingValidator.isValid(ipDetails)).thenReturn(false);
-        Mockito.when(failingValidator.getErrorCode())
+        Validatable<IpDetails> failingValidator = mock(Validatable.class);
+        when(failingValidator.isValid(ipDetails)).thenReturn(false);
+        when(failingValidator.getErrorCode())
                 .thenReturn(Optional.of(ErrorCode.RESTRICTED_ISP));
 
-        Mockito.when(ipValidatorFactory.getValidators())
+        when(ipValidatorFactory.getValidators())
                 .thenReturn(List.of(failingValidator));
 
-        Mockito.when(ipApiClient.getIpDetails("1.2.3.4"))
+        when(ipApiClient.getIpDetails("1.2.3.4"))
                 .thenReturn(Optional.of(ipDetails));
 
         ConverterRuntimeException ex = assertThrows(
@@ -94,55 +109,77 @@ class ValidateIpServiceTest { // kerem bunu elden gecir
 
         assertEquals(ErrorCode.RESTRICTED_ISP, ex.getErrorCode());
 
-        Mockito.verify(conversionLogService)
-                .update(conversionLog);
+        verify(conversionLogService).update(conversionLog);
     }
 
-    // ------------------------------------------------------
-    // 4. Happy path → IP saved, no exception
-    // ------------------------------------------------------
+    // =========================
+    // VALIDATOR FAILS BUT NO ERROR CODE
+    // =========================
 
     @Test
-    void shouldSaveIpDetailsWhenAllValidatorsPass() {
-        IpDetails ipDetails = new IpDetails("DE", "VODAFONE");
+    void shouldNotThrowWhenValidatorFailsWithoutErrorCode() {
+        IpDetails ipDetails = new IpDetails("US", "AWS");
 
-        Validatable<IpDetails> validator = Mockito.mock(Validatable.class);
-        Mockito.when(validator.getValidationKey()).thenReturn("ValidateCountry");
-        Mockito.when(validator.isValid(ipDetails)).thenReturn(true);
+        Validatable<IpDetails> validator = mock(Validatable.class);
+        when(validator.isValid(ipDetails)).thenReturn(false);
+        when(validator.getErrorCode()).thenReturn(Optional.empty());
 
-        Mockito.when(ipValidatorFactory.getValidators())
+        when(ipValidatorFactory.getValidators())
                 .thenReturn(List.of(validator));
 
-        Mockito.when(ipApiClient.getIpDetails("1.2.3.4"))
+        when(ipApiClient.getIpDetails("1.2.3.4"))
                 .thenReturn(Optional.of(ipDetails));
 
         assertDoesNotThrow(() ->
                 service.saveIpDetailsAndRunIpValidationRules(conversionLog, "1.2.3.4")
         );
 
-        Mockito.verify(conversionLogService)
-                .update(conversionLog);
+        verify(conversionLogService).update(conversionLog);
     }
 
-    // ------------------------------------------------------
-    // 5. Only first failing validator is applied
-    // ------------------------------------------------------
+    // =========================
+    // HAPPY PATH
+    // =========================
+
+    @Test
+    void shouldSaveIpDetailsWhenAllValidatorsPass() {
+        IpDetails ipDetails = new IpDetails("DE", "VODAFONE");
+
+        Validatable<IpDetails> validator = mock(Validatable.class);
+        when(validator.isValid(ipDetails)).thenReturn(true);
+
+        when(ipValidatorFactory.getValidators())
+                .thenReturn(List.of(validator));
+
+        when(ipApiClient.getIpDetails("1.2.3.4"))
+                .thenReturn(Optional.of(ipDetails));
+
+        assertDoesNotThrow(() ->
+                service.saveIpDetailsAndRunIpValidationRules(conversionLog, "1.2.3.4")
+        );
+
+        verify(conversionLogService).update(conversionLog);
+    }
+
+    // =========================
+    // STOP AT FIRST FAILURE
+    // =========================
 
     @Test
     void shouldStopAtFirstFailingValidator() {
         IpDetails ipDetails = new IpDetails("US", "AWS");
 
-        Validatable<IpDetails> firstFail = Mockito.mock(Validatable.class);
-        Mockito.when(firstFail.isValid(ipDetails)).thenReturn(false);
-        Mockito.when(firstFail.getErrorCode())
+        Validatable<IpDetails> firstFail = mock(Validatable.class);
+        when(firstFail.isValid(ipDetails)).thenReturn(false);
+        when(firstFail.getErrorCode())
                 .thenReturn(Optional.of(ErrorCode.RESTRICTED_COUNTRY));
 
-        Validatable<IpDetails> secondValidator = Mockito.mock(Validatable.class);
+        Validatable<IpDetails> secondValidator = mock(Validatable.class);
 
-        Mockito.when(ipValidatorFactory.getValidators())
+        when(ipValidatorFactory.getValidators())
                 .thenReturn(List.of(firstFail, secondValidator));
 
-        Mockito.when(ipApiClient.getIpDetails("1.2.3.4"))
+        when(ipApiClient.getIpDetails("1.2.3.4"))
                 .thenReturn(Optional.of(ipDetails));
 
         ConverterRuntimeException ex = assertThrows(
@@ -151,7 +188,6 @@ class ValidateIpServiceTest { // kerem bunu elden gecir
         );
 
         assertEquals(ErrorCode.RESTRICTED_COUNTRY, ex.getErrorCode());
-
-        Mockito.verify(secondValidator, Mockito.never()).isValid(ipDetails);
+        verify(secondValidator, never()).isValid(ipDetails);
     }
 }
