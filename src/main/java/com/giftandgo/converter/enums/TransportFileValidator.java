@@ -16,7 +16,7 @@ public enum TransportFileValidator {
     LIKES(StringNotEmptyLessThan100Validator.INSTANCE, 3, "Likes", 10),
     TRANSPORT(StringNotEmptyLessThan100Validator.INSTANCE, 4, "Transport", 10),
     AVG_SPEED(DoubleValidator.INSTANCE, 5, "Average Speed", 10),
-    MAX_SPEED(DoubleValidator.INSTANCE, 6, "Top Speed", 10),
+    TOP_SPEED(DoubleValidator.INSTANCE, 6, "Top Speed", 10),
     DELIMITER_COUNT(DelimiterCountValidator.INSTANCE, 0, "Delimiter Count", 0);
 
     private final BiPredicate validator;
