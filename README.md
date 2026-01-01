@@ -1,4 +1,4 @@
-# :rowboat: 🚚 :bus: :car: File Converter :minibus: :train: :bike: :airplane: :sailboat:
+# :rowboat: 🚚 :car: File Converter :train: :bike: :airplane: 
 
 The **GiftAndGo Converter Service** is a Spring Boot application that accepts a transport data file, validates its
 content
