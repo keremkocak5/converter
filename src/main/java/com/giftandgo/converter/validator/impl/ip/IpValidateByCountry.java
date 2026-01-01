@@ -29,7 +29,7 @@ public class IpValidateByCountry implements Validatable<IpDetails> {
 
     @Override
     public String getValidationKey() {
-        return "ValidateCountryStrategy";
+        return "IpValidateByCountry";
     }
 
     @Override

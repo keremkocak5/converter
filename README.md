@@ -125,7 +125,7 @@ All errors follow **RFC 7807 – Problem Details for HTTP APIs**.
 - Validation strategies are configurable via application properties:
 
 ```properties
-feature.flag.ip.validation.strategies=ValidateISPStrategy,ValidateCountryStrategy
+feature.flag.ip.validation.strategies=IpValidateByIsp,IpValidateByCountry
 ```
 
 - If no strategies are configured, **the IP‑API call is skipped entirely** 🚀

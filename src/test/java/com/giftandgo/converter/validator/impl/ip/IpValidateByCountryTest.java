@@ -48,7 +48,7 @@ class IpValidateByCountryTest {
 
     @Test
     void getValidationKey_shouldReturnCorrectKey() {
-        assertEquals("ValidateCountryStrategy", validator.getValidationKey());
+        assertEquals("IpValidateByCountry", validator.getValidationKey());
     }
 
     @Test

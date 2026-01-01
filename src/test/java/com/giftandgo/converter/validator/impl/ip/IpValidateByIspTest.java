@@ -64,7 +64,7 @@ class IpValidateByIspTest {
         String key = validator.getValidationKey();
 
         // then
-        assertEquals("ValidateISPStrategy", key);
+        assertEquals("IpValidateByIsp", key);
     }
 
     @Test

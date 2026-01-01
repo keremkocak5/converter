@@ -29,7 +29,7 @@ public class IpValidateByIsp implements Validatable<IpDetails> {
 
     @Override
     public String getValidationKey() {
-        return "ValidateISPStrategy";
+        return "IpValidateByIsp";
     }
 
     @Override
