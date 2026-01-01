@@ -28,7 +28,8 @@ class TransportFileReaderService extends FileReaderServiceTemplate<TransportOutc
         AtomicInteger lineNumber = new AtomicInteger();
         for (String[] line : lines) {
             int currentLine = lineNumber.incrementAndGet();
-            Arrays.stream(TransportFileValidator.values())
+            transportFileValidatorFactory.getValidators()
+                    .stream()
                     .sorted(Comparator.comparing(validator -> validator.getPriority()))
                     .filter(validator -> !validator.getValidator().test(line, validator.getAssociatedColumn()))
                     .findAny()

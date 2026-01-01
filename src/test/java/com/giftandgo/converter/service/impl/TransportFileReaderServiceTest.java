@@ -4,7 +4,6 @@ import com.giftandgo.converter.enums.ErrorCode;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.OutcomeFile;
 import com.giftandgo.converter.validator.Validatable;
-import com.giftandgo.converter.validator.impl.file.TransportFileValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
@@ -18,13 +17,10 @@ import static org.mockito.Mockito.*;
 
 class TransportFileReaderServiceTest {
 
-    private TransportFileValidatorFactory validatorFactory;
     private TransportFileReaderService service;
 
     @BeforeEach
     void setUp() {
-        validatorFactory = mock(TransportFileValidatorFactory.class);
-        service = new TransportFileReaderService(validatorFactory);
     }
 
     // =========================
@@ -94,9 +90,6 @@ class TransportFileReaderServiceTest {
                 "text/plain",
                 invalidContent.getBytes(StandardCharsets.UTF_8)
         );
-
-        when(validatorFactory.getValidators())
-                .thenReturn(List.of());
 
         ConverterRuntimeException ex = assertThrows(
                 ConverterRuntimeException.class,
