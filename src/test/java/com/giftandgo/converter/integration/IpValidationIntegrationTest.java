@@ -48,7 +48,7 @@ public class IpValidationIntegrationTest extends TestBase {
                 .then()
                 .statusCode(403)
                 .contentType("application/problem+json")
-                .body("title", equalTo("Country is restricted."))
+                .body("detail", equalTo("Country is restricted."))
                 .body("errorCode", equalTo("I0002"));
 
         verifyIpApiCalled();
@@ -60,7 +60,7 @@ public class IpValidationIntegrationTest extends TestBase {
                 .then()
                 .statusCode(403)
                 .contentType("application/problem+json")
-                .body("title", equalTo("ISP is restricted."))
+                .body("detail", equalTo("ISP is restricted."))
                 .body("errorCode", equalTo("I0001"));
 
         verifyIpApiCalled();
@@ -72,7 +72,7 @@ public class IpValidationIntegrationTest extends TestBase {
                 .then()
                 .statusCode(500)
                 .contentType("application/problem+json")
-                .body("title", equalTo("IP API could not resolve arguments."))
+                .body("detail", equalTo("IP API could not resolve arguments."))
                 .body("errorCode", equalTo("I0011"));
 
         verifyIpApiCalled();
@@ -84,7 +84,7 @@ public class IpValidationIntegrationTest extends TestBase {
                 .then()
                 .statusCode(403)
                 .contentType("application/problem+json")
-                .body("title", equalTo("ISP is restricted."))
+                .body("detail", equalTo("ISP is restricted."))
                 .body("errorCode", equalTo("I0001"));
 
         verifyIpApiCalled();
@@ -96,7 +96,7 @@ public class IpValidationIntegrationTest extends TestBase {
                 .then()
                 .statusCode(500)
                 .contentType("application/problem+json")
-                .body("title", equalTo("Could not connect to IP-API."))
+                .body("detail", equalTo("Could not connect to IP-API."))
                 .body("errorCode", equalTo("I0010"));
 
         verifyIpApiCalled();
