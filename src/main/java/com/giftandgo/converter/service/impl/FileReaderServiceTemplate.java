@@ -33,6 +33,10 @@ abstract class FileReaderServiceTemplate<T> implements FileReadable {
     public OutcomeFile getValidatedFileContent(MultipartFile file) {
         List<String[]> lines = getDelimitedLines(file);
         validateContent(lines);
+        return produceOutcomeFile(lines);
+    }
+
+    private OutcomeFile produceOutcomeFile(List<String[]> lines) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         FileReadWriteUtil.write(outputStream, getParsedContent(lines));
         return new OutcomeFile(
