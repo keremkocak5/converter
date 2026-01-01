@@ -47,7 +47,8 @@ abstract class FileReaderServiceTemplate<T> implements FileReadable {
 
     private List<T> getOutputContent(List<String[]> lines) {
         try {
-            return lines.stream()
+            return lines
+                    .stream()
                     .map(this::getLineToOutputMapper)
                     .collect(Collectors.toList());
         } catch (Exception e) {
@@ -58,10 +59,7 @@ abstract class FileReaderServiceTemplate<T> implements FileReadable {
 
     private List<String[]> getDelimitedLines(MultipartFile file) {
         try {
-            return FileReadWriteUtil.read(
-                    file.getInputStream(),
-                    getDelimiterPattern()
-            );
+            return FileReadWriteUtil.read(file.getInputStream(), getDelimiterPattern());
         } catch (Exception e) {
             log.error("Cannot categorize file.", e);
             throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);
