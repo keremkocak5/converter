@@ -48,7 +48,7 @@ class TransportFileValidatorFactoryTest {
     }
 
     @Test
-    void shouldReturnValidatorsSortedByPriorityDescending() {
+    void shouldReturnValidatorsSortedByPriorityAscending() {
         // given
         ReflectionTestUtils.setField(factory, "validationEnabled", true);
 
@@ -61,8 +61,8 @@ class TransportFileValidatorFactoryTest {
             int nextPriority = validators.get(i + 1).getValidationPriority();
 
             assertTrue(
-                    currentPriority >= nextPriority,
-                    "Validators are not sorted by priority descending"
+                    currentPriority <= nextPriority,
+                    "Validators are not sorted by priority ascending"
             );
         }
     }
