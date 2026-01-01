@@ -38,14 +38,14 @@ abstract class FileReaderServiceTemplate<T> implements FileReadable {
 
     private OutcomeFile produceOutcomeFile(List<String[]> lines) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        FileReadWriteUtil.write(outputStream, getParsedContent(lines));
+        FileReadWriteUtil.write(outputStream, getOutputContent(lines));
         return new OutcomeFile(
                 getFileName(),
                 new ByteArrayInputStream(outputStream.toByteArray())
         );
     }
 
-    private List<T> getParsedContent(List<String[]> lines) {
+    private List<T> getOutputContent(List<String[]> lines) {
         try {
             return lines.stream()
                     .map(this::getLineToOutputMapper)
