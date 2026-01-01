@@ -1,6 +1,7 @@
 package com.giftandgo.converter.service.impl;
 
 import com.giftandgo.converter.enums.ErrorCode;
+import com.giftandgo.converter.enums.TransportFileValidator;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.OutcomeFile;
 import com.giftandgo.converter.validator.Validatable;
@@ -46,9 +47,6 @@ class TransportFileReaderServiceTest {
 
         Validatable<String[]> validator = mock(Validatable.class);
         when(validator.isValid(any())).thenReturn(true);
-
-        when(validatorFactory.getValidators())
-                .thenReturn(List.of(validator));
 
         OutcomeFile result = service.getValidatedFileContent(file);
 
@@ -129,9 +127,6 @@ class TransportFileReaderServiceTest {
         when(validator.getErrorCode())
                 .thenReturn(java.util.Optional.of(ErrorCode.INCORRECT_DELIMITERS));
 
-        when(validatorFactory.getValidators())
-                .thenReturn(List.of(validator));
-
         ConverterRuntimeException ex = assertThrows(
                 ConverterRuntimeException.class,
                 () -> service.getValidatedFileContent(file)
@@ -162,8 +157,6 @@ class TransportFileReaderServiceTest {
 
         Validatable<String[]> secondValidator = mock(Validatable.class);
 
-        when(validatorFactory.getValidators())
-                .thenReturn(List.of(firstFail, secondValidator));
 
         assertThrows(
                 ConverterRuntimeException.class,
