@@ -3,7 +3,6 @@ package com.giftandgo.converter.service.impl;
 import com.giftandgo.converter.enums.TransportFileValidator;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.TransportOutcomeContent;
-import com.giftandgo.converter.validator.Validatable;
 import com.giftandgo.converter.validator.impl.file.TransportFileValidatorFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

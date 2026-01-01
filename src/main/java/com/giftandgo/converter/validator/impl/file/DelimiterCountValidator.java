@@ -1,8 +1,6 @@
 package com.giftandgo.converter.validator.impl.file;
 
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
 
 public class DelimiterCountValidator implements BiPredicate<String[], Integer> {
 

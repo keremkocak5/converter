@@ -1,7 +1,6 @@
 package com.giftandgo.converter.service.impl;
 
 import com.giftandgo.converter.enums.ErrorCode;
-import com.giftandgo.converter.enums.TransportFileValidator;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.OutcomeFile;
 import com.giftandgo.converter.validator.Validatable;

@@ -1,9 +1,6 @@
 package com.giftandgo.converter.validator.impl.file;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public class IDPatternValidator implements BiPredicate<String[], Integer> {
