@@ -1,17 +1,17 @@
 package com.giftandgo.converter.service.impl;
 
-import com.giftandgo.converter.enums.TransportFileValidator;
 import com.giftandgo.converter.exception.ConverterRuntimeException;
 import com.giftandgo.converter.model.TransportOutcomeContent;
 import com.giftandgo.converter.validator.impl.file.TransportFileValidatorFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
+
+import static com.giftandgo.converter.enums.ErrorCode.INCORRECT_FILE_FORMAT;
 
 @Service
 @RequiredArgsConstructor
@@ -30,12 +30,13 @@ class TransportFileReaderService extends FileReaderServiceTemplate<TransportOutc
             int currentLine = lineNumber.incrementAndGet();
             transportFileValidatorFactory.getValidators()
                     .stream()
-                    .sorted(Comparator.comparing(validator -> validator.getPriority()))
+                    .sorted(Comparator.comparing(validator -> validator.getValidationPriority()))
                     .filter(validator -> !validator.getValidator().test(line, validator.getAssociatedColumn()))
                     .findAny()
                     .ifPresent(validator -> {
                         throw new ConverterRuntimeException(
-                                validator.getErrorCode(),
+                                INCORRECT_FILE_FORMAT,
+                                validator.getColumnName(),
                                 currentLine
                         );
                     });

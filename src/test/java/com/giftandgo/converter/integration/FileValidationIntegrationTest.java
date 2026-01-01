@@ -93,7 +93,7 @@ public class FileValidationIntegrationTest extends TestBase {
                 .statusCode(400)
                 .contentType("application/problem+json")
                 .body("detail", equalTo("UUID not valid at line 3"))
-                .body("errorCode", equalTo("I0021"));
+                .body("errorCode", equalTo("I0020"));
     }
 
     @Test
@@ -113,7 +113,7 @@ public class FileValidationIntegrationTest extends TestBase {
                 .statusCode(400)
                 .contentType("application/problem+json")
                 .body("detail", equalTo("Id not valid at line 2"))
-                .body("errorCode", equalTo("I0022"));
+                .body("errorCode", equalTo("I0020"));
     }
 
     @Test
@@ -132,8 +132,8 @@ public class FileValidationIntegrationTest extends TestBase {
                 .then()
                 .statusCode(400)
                 .contentType("application/problem+json")
-                .body("detail", equalTo("Average speed not valid at line 1"))
-                .body("errorCode", equalTo("I0026"));
+                .body("detail", equalTo("Average Speed not valid at line 1"))
+                .body("errorCode", equalTo("I0020"));
     }
 
     @Test
@@ -153,7 +153,7 @@ public class FileValidationIntegrationTest extends TestBase {
                 .statusCode(400)
                 .contentType("application/problem+json")
                 .body("detail", equalTo("Likes not valid at line 3"))
-                .body("errorCode", equalTo("I0024"));
+                .body("errorCode", equalTo("I0020"));
     }
 
     @Test
@@ -172,8 +172,8 @@ public class FileValidationIntegrationTest extends TestBase {
                 .then()
                 .statusCode(400)
                 .contentType("application/problem+json")
-                .body("detail", equalTo("Top speed not valid at line 3"))
-                .body("errorCode", equalTo("I0027"));
+                .body("detail", equalTo("Top Speed not valid at line 3"))
+                .body("errorCode", equalTo("I0020"));
     }
 
     @Test
@@ -193,7 +193,7 @@ public class FileValidationIntegrationTest extends TestBase {
                 .statusCode(400)
                 .contentType("application/problem+json")
                 .body("detail", equalTo("Name not valid at line 1"))
-                .body("errorCode", equalTo("I0023"));
+                .body("errorCode", equalTo("I0020"));
     }
 
     @Test
@@ -213,7 +213,27 @@ public class FileValidationIntegrationTest extends TestBase {
                 .statusCode(400)
                 .contentType("application/problem+json")
                 .body("detail", equalTo("Transport not valid at line 2"))
-                .body("errorCode", equalTo("I0025"));
+                .body("errorCode", equalTo("I0020"));
+    }
+
+    @Test
+    public void shouldNotSucceedWhenDelimitersInvalid() {
+        given()
+                .header("X-Forwarded-For", "1.1.1.1")
+                .multiPart(
+                        "file",
+                        "input.txt",
+                        readFile("transport-delimiter-incorrect-file.txt"),
+                        MediaType.TEXT_PLAIN_VALUE
+                )
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .when()
+                .post("/converter/v1/file")
+                .then()
+                .statusCode(400)
+                .contentType("application/problem+json")
+                .body("detail", equalTo("Delimiter Count not valid at line 2"))
+                .body("errorCode", equalTo("I0020"));
     }
 
     private static byte[] readFile(String filename) {
