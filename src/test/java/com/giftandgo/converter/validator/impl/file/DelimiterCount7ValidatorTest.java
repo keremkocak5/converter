@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class DelimiterCountValidatorTest {
+class DelimiterCount7ValidatorTest {
 
-    private final DelimiterCountValidator validator = DelimiterCountValidator.INSTANCE;
+    private final DelimiterCount7Validator validator = DelimiterCount7Validator.INSTANCE;
 
     @Test
     void shouldReturnTrueWhenContentHasExactlySevenElements() {

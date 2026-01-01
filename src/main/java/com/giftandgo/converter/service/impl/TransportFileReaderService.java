@@ -44,11 +44,11 @@ class TransportFileReaderService extends FileReaderServiceTemplate<TransportOutc
     }
 
     @Override
-    TransportOutcomeContent getLineToOutputMapper(String[] delimitedPart) {
+    TransportOutcomeContent getLineToOutputMapper(String[] line) {
         return new TransportOutcomeContent(
-                delimitedPart[2],
-                delimitedPart[4],
-                Double.parseDouble(delimitedPart[6])
+                line[2],
+                line[4],
+                Double.parseDouble(line[6])
         );
     }
 

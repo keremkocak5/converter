@@ -2,11 +2,11 @@ package com.giftandgo.converter.validator.impl.file;
 
 import java.util.function.BiPredicate;
 
-public class DelimiterCountValidator implements BiPredicate<String[], Integer> {
+public class DelimiterCount7Validator implements BiPredicate<String[], Integer> {
 
-    public static final DelimiterCountValidator INSTANCE = new DelimiterCountValidator();
+    public static final DelimiterCount7Validator INSTANCE = new DelimiterCount7Validator();
 
-    private DelimiterCountValidator() {
+    private DelimiterCount7Validator() {
     }
 
     @Override

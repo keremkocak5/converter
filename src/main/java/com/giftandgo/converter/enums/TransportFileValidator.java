@@ -10,7 +10,7 @@ import java.util.function.BiPredicate;
 @RequiredArgsConstructor
 public enum TransportFileValidator {
 
-    DELIMITER_COUNT(DelimiterCountValidator.INSTANCE, 0, "Delimiter Count", 0),
+    DELIMITER_COUNT(DelimiterCount7Validator.INSTANCE, 0, "Delimiter Count", 0),
     UUID(UUIDValidator.INSTANCE, 0, "UUID", 10),
     ID(IDPatternValidator.INSTANCE, 1, "Id", 10),
     NAME(StringNotEmptyLessThan100Validator.INSTANCE, 2, "Name", 10),
