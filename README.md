@@ -2,8 +2,7 @@
 
 The **GiftAndGo Converter Service** is a Spring Boot application that accepts a transport data file, validates its
 content
-*and* the caller’s IP address, and returns a processed outcome file when all validations succeed. Smooth, safe, and fast
-⚡
+*and* the caller’s IP address, and returns a processed outcome file when all validations succeed. ⚡
 
 ---
 
@@ -214,4 +213,4 @@ mvn test
 
 ---
 
-Made with ☕, Spring Boot, and a bit of validation magic ✨
+Made with ☕, Spring Boot, Maven, WireMock, Junit and H2.
