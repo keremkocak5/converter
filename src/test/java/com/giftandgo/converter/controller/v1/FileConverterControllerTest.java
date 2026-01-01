@@ -32,8 +32,6 @@ class FileConverterControllerTest {
     private FileConverterController controller;
 
     private MockMvc mockMvc;
-    public static final long MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
-
 
     @BeforeEach
     void setUp() {
