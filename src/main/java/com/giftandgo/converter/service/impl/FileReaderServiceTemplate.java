@@ -45,9 +45,9 @@ abstract class FileReaderServiceTemplate<T> implements FileReadable {
         );
     }
 
-    private List<T> getParsedContent(List<String[]> delimitedParts) {
+    private List<T> getParsedContent(List<String[]> lines) {
         try {
-            return delimitedParts.stream()
+            return lines.stream()
                     .map(this::getLineToOutputMapper)
                     .collect(Collectors.toList());
         } catch (Exception e) {
