@@ -20,231 +20,128 @@ import static org.hamcrest.Matchers.notNullValue;
 @ActiveProfiles("wiremock")
 public class FileValidationIntegrationTest extends TestBase {
 
+    private static final String ENDPOINT = "/converter/v1/file";
+    private static final String IP = "1.1.1.1";
+    private static final String FILE_NAME = "input.txt";
+
     @Test
     public void shouldSucceedWhenFileDoesNotHaveErrors() {
-        given()
-                .header("X-Forwarded-For", "1.1.1.1")
-                .multiPart(
-                        "file",
-                        "input.txt",
-                        readFile("transport-success-file.txt"),
-                        MediaType.TEXT_PLAIN_VALUE
-                )
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .when()
-                .post("/converter/v1/file")
-                .then()
-                .statusCode(200)
-                .header("Content-Disposition", notNullValue());
-        // kerem buraya kontrol ekle
-        // kerem empty line validatorunu kaldir
-    }
-
-    @Test
-    public void shouldSucceedWhenFileDoesNotHaveErrorsButEmptyLine() {
-        given()
-                .header("X-Forwarded-For", "1.1.1.1")
-                .multiPart(
-                        "file",
-                        "input.txt",
-                        readFile("transport-success-empty-line-file.txt"),
-                        MediaType.TEXT_PLAIN_VALUE
-                )
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .when()
-                .post("/converter/v1/file")
+        postFile("transport-success-file.txt")
                 .then()
                 .statusCode(200)
                 .header("Content-Disposition", notNullValue());
     }
 
     @Test
-    public void shouldSucceedWhenFileDoesNotHaveErrorsButEmptyFile() {
-        given()
-                .header("X-Forwarded-For", "1.1.1.1")
-                .multiPart(
-                        "file",
-                        "input.txt",
-                        readFile("empty-file.txt"),
-                        MediaType.TEXT_PLAIN_VALUE
-                )
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .when()
-                .post("/converter/v1/file")
+    public void shouldSucceedWhenFileHasEmptyLine() {
+        postFile("transport-success-empty-line-file.txt")
                 .then()
                 .statusCode(200)
                 .header("Content-Disposition", notNullValue());
     }
 
     @Test
-    public void shouldNotSucceedWhenUUIDInvalid() {
-        given()
-                .header("X-Forwarded-For", "1.1.1.1")
-                .multiPart(
-                        "file",
-                        "input.txt",
-                        readFile("transport-uuid-invalid-file.txt"),
-                        MediaType.TEXT_PLAIN_VALUE
-                )
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .when()
-                .post("/converter/v1/file")
+    public void shouldSucceedWhenFileIsEmpty() {
+        postFile("empty-file.txt")
                 .then()
-                .statusCode(400)
-                .contentType("application/problem+json")
-                .body("detail", equalTo("UUID not valid at line 3"))
-                .body("errorCode", equalTo("I0020"));
+                .statusCode(200)
+                .header("Content-Disposition", notNullValue());
     }
 
     @Test
-    public void shouldNotSucceedWhenIDInvalid() {
-        given()
-                .header("X-Forwarded-For", "1.1.1.1")
-                .multiPart(
-                        "file",
-                        "input.txt",
-                        readFile("transport-id-invalid-file.txt"),
-                        MediaType.TEXT_PLAIN_VALUE
-                )
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .when()
-                .post("/converter/v1/file")
-                .then()
-                .statusCode(400)
-                .contentType("application/problem+json")
-                .body("detail", equalTo("Id not valid at line 2"))
-                .body("errorCode", equalTo("I0020"));
+    public void shouldFailWhenUUIDInvalid() {
+        assertInvalidFile(
+                "transport-uuid-invalid-file.txt",
+                "UUID not valid at line 3"
+        );
     }
 
     @Test
-    public void shouldNotSucceedWhenAvgSpeedInvalid() {
-        given()
-                .header("X-Forwarded-For", "1.1.1.1")
-                .multiPart(
-                        "file",
-                        "input.txt",
-                        readFile("transport-avg-speed-invalid-file.txt"),
-                        MediaType.TEXT_PLAIN_VALUE
-                )
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .when()
-                .post("/converter/v1/file")
-                .then()
-                .statusCode(400)
-                .contentType("application/problem+json")
-                .body("detail", equalTo("Average Speed not valid at line 1"))
-                .body("errorCode", equalTo("I0020"));
+    public void shouldFailWhenIDInvalid() {
+        assertInvalidFile(
+                "transport-id-invalid-file.txt",
+                "Id not valid at line 2"
+        );
     }
 
     @Test
-    public void shouldNotSucceedWhenLikeInvalid() {
-        given()
-                .header("X-Forwarded-For", "1.1.1.1")
-                .multiPart(
-                        "file",
-                        "input.txt",
-                        readFile("transport-like-invalid-file.txt"),
-                        MediaType.TEXT_PLAIN_VALUE
-                )
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .when()
-                .post("/converter/v1/file")
-                .then()
-                .statusCode(400)
-                .contentType("application/problem+json")
-                .body("detail", equalTo("Likes not valid at line 3"))
-                .body("errorCode", equalTo("I0020"));
+    public void shouldFailWhenAvgSpeedInvalid() {
+        assertInvalidFile(
+                "transport-avg-speed-invalid-file.txt",
+                "Average Speed not valid at line 1"
+        );
     }
 
     @Test
-    public void shouldNotSucceedWhenMaxSpeedInvalid() {
-        given()
-                .header("X-Forwarded-For", "1.1.1.1")
-                .multiPart(
-                        "file",
-                        "input.txt",
-                        readFile("transport-max-speed-invalid-file.txt"),
-                        MediaType.TEXT_PLAIN_VALUE
-                )
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .when()
-                .post("/converter/v1/file")
-                .then()
-                .statusCode(400)
-                .contentType("application/problem+json")
-                .body("detail", equalTo("Top Speed not valid at line 3"))
-                .body("errorCode", equalTo("I0020"));
+    public void shouldFailWhenLikesInvalid() {
+        assertInvalidFile(
+                "transport-like-invalid-file.txt",
+                "Likes not valid at line 3"
+        );
     }
 
     @Test
-    public void shouldNotSucceedWhenNameInvalid() {
-        given()
-                .header("X-Forwarded-For", "1.1.1.1")
-                .multiPart(
-                        "file",
-                        "input.txt",
-                        readFile("transport-name-invalid-file.txt"),
-                        MediaType.TEXT_PLAIN_VALUE
-                )
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .when()
-                .post("/converter/v1/file")
-                .then()
-                .statusCode(400)
-                .contentType("application/problem+json")
-                .body("detail", equalTo("Name not valid at line 1"))
-                .body("errorCode", equalTo("I0020"));
+    public void shouldFailWhenMaxSpeedInvalid() {
+        assertInvalidFile(
+                "transport-max-speed-invalid-file.txt",
+                "Top Speed not valid at line 3"
+        );
     }
 
     @Test
-    public void shouldNotSucceedWhenTransportInvalid() {
-        given()
-                .header("X-Forwarded-For", "1.1.1.1")
-                .multiPart(
-                        "file",
-                        "input.txt",
-                        readFile("transport-transport-invalid-file.txt"),
-                        MediaType.TEXT_PLAIN_VALUE
-                )
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .when()
-                .post("/converter/v1/file")
-                .then()
-                .statusCode(400)
-                .contentType("application/problem+json")
-                .body("detail", equalTo("Transport not valid at line 2"))
-                .body("errorCode", equalTo("I0020"));
+    public void shouldFailWhenNameInvalid() {
+        assertInvalidFile(
+                "transport-name-invalid-file.txt",
+                "Name not valid at line 1"
+        );
     }
 
     @Test
-    public void shouldNotSucceedWhenDelimitersInvalid() {
-        given()
-                .header("X-Forwarded-For", "1.1.1.1")
+    public void shouldFailWhenTransportInvalid() {
+        assertInvalidFile(
+                "transport-transport-invalid-file.txt",
+                "Transport not valid at line 2"
+        );
+    }
+
+    @Test
+    public void shouldFailWhenDelimiterCountInvalid() {
+        assertInvalidFile(
+                "transport-delimiter-incorrect-file.txt",
+                "Delimiter Count not valid at line 2"
+        );
+    }
+
+    /* ---------- helpers ---------- */
+
+    private io.restassured.response.Response postFile(String resourceFile) {
+        return given()
+                .header("X-Forwarded-For", IP)
                 .multiPart(
                         "file",
-                        "input.txt",
-                        readFile("transport-delimiter-incorrect-file.txt"),
+                        FILE_NAME,
+                        readFile(resourceFile),
                         MediaType.TEXT_PLAIN_VALUE
                 )
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .when()
-                .post("/converter/v1/file")
+                .post(ENDPOINT);
+    }
+
+    private void assertInvalidFile(String file, String expectedDetail) {
+        postFile(file)
                 .then()
                 .statusCode(400)
                 .contentType("application/problem+json")
-                .body("detail", equalTo("Delimiter Count not valid at line 2"))
+                .body("detail", equalTo(expectedDetail))
                 .body("errorCode", equalTo("I0020"));
     }
 
     private static byte[] readFile(String filename) {
-        byte[] fileContent;
-        try {
-            try (InputStream is = new ClassPathResource(filename).getInputStream()) {
-                fileContent = is.readAllBytes();
-            }
+        try (InputStream is = new ClassPathResource(filename).getInputStream()) {
+            return is.readAllBytes();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("Could not read test file: " + filename, e);
         }
-        return fileContent;
     }
 }
