@@ -1,32 +1,48 @@
-# File Converter
+# 🚚 File Converter
 
-The GiftAndGo Converter Service is a Spring Boot application that accepts a transport data file, validates its content
-and the caller’s IP address, and returns a processed outcome file when all validations succeed. :ship:
+The **GiftAndGo Converter Service** is a Spring Boot application that accepts a transport data file, validates its
+content
+*and* the caller’s IP address, and returns a processed outcome file when all validations succeed. Smooth, safe, and fast
+⚡
 
-## Starting the app
+---
 
-Make sure you have Java 17 and Maven installed on your device. Then run the following command at the root folder (where
-pom.xml resides) of your project.
+## 🚀 Starting the App
+
+Make sure you have **Java 17** and **Maven** installed.
+
+From the project root (where `pom.xml` lives), run:
 
 ```bash
 mvn spring-boot:run
 ```
 
-## Accessing the Application
+Easy as that 😄
 
-#### Swagger is enabled: 🚀
+---
 
+## 🌐 Accessing the Application
+
+### Swagger UI (enabled by default)
+
+```
 http://localhost:8080/converter/swagger-ui/index.html
+```
 
-#### In-Memory Relational Database endpoint:
+### In‑Memory Database (H2 Console)
 
+```
 http://localhost:8080/converter/h2-console/
+```
 
-username: sa
+Credentials:
 
-password: leave empty
+- **Username:** sa
+- **Password:** *(leave empty)*
 
-## API Specification
+---
+
+## 📡 API Specification
 
 ### Convert File
 
@@ -45,12 +61,12 @@ Content-Type: multipart/form-data
 
 **Request**
 
-- Multipart field: `file` (text/plain)
+- Multipart field: `file` (`text/plain`)
 
-**Response (200 OK)**
+**Successful Response (200 OK)** 🎉
 
-- Converted file as attachment
-- Header:
+- Converted file returned as an attachment
+- Response header:
 
 ```
 Content-Disposition: attachment; filename=OutcomeFile.json
@@ -58,11 +74,11 @@ Content-Disposition: attachment; filename=OutcomeFile.json
 
 ---
 
-## Error Responses
+## ❌ Error Responses
 
 All errors follow **RFC 7807 – Problem Details for HTTP APIs**.
 
-### Example – Validation Error
+### Validation Error Example
 
 ```json
 {
@@ -75,7 +91,7 @@ All errors follow **RFC 7807 – Problem Details for HTTP APIs**.
 }
 ```
 
-### Example – IP Restriction
+### IP Restriction Example
 
 ```json
 {
@@ -88,71 +104,74 @@ All errors follow **RFC 7807 – Problem Details for HTTP APIs**.
 }
 ```
 
-#### Error Codes
+### 🧾 Error Codes
 
-| Code  | Description                              | HTTP |
-|------|------------------------------------------|------|
-| I0001 | ISP is restricted                        | 403  |
-| I0002 | Country is restricted                    | 403  |
-| I0010 | IP API connection error                  | 500  |
-| I0011 | IP API resolve error                     | 500  |
-| I0013 | Cannot read file                         | 400  |
-| I0014 | Cannot write file                        | 500  |
-| I0020 | Incorrect file format                    | 400  |
-| I0000 | Internal server error                    | 500  |
+| Code  | Description                       | HTTP |
+|------|-----------------------------------|------|
+| I0001 | ISP is restricted                | 403  |
+| I0002 | Country is restricted            | 403  |
+| I0010 | IP API connection error           | 500  |
+| I0011 | IP API resolve error              | 500  |
+| I0013 | Cannot read file                  | 400  |
+| I0014 | Cannot write file                 | 500  |
+| I0020 | Incorrect file format             | 400  |
+| I0000 | Internal server error             | 500  |
 
 ---
 
-## IP Validation
+## 🌍 IP Validation
 
-- The app connects to IP-API client for IP related validations.
-- IP validations can be enabled and disabled in a fine-grained fashion using application properties: simply add the
-  validation names to feature.flag.ip.validation.strategies property.
-  eg:
-   ```
-   feature.flag.ip.validation.strategies=ValidateISPStrategy,ValidateCountryStrategy
-   ```
-- For local testing purposes, the IP validations are disabled (but can be enabled as described above).
-- If no validations are set, the app will skip IP-API call.
-- If a new IP validation service will be introduced to replace IP-API, please create a new package-private client which
-  implements IpDetailsRetrievable.
-- If new IP validation rules to be introduced, all you have to do is to create a new validator which implements
-  Validatable interface; please check "validator" package for examples.
+- The application integrates with an **IP‑API client** for IP-based validation.
+- Validation strategies are configurable via application properties:
 
-## File Validation
+```properties
+feature.flag.ip.validation.strategies=ValidateISPStrategy,ValidateCountryStrategy
+```
 
-- File validations can be enabled and disabled by setting feature.flag.file.validation.enabled property true or false:
-  eg:
-   ```
-  feature.flag.file.validation.enabled=true
-   ```
-- If existing columns are changed, or new columns are introduced to TransportationFile template, TransportFileValidator
-  enum should be edited to reflect those changes.
-- If the structure of the output file has to be changed, please edit TransportFileReaderService class.
-- If a new file type, such as, say, FavoriteMusicBands is required to be processed, create a new FileReader service
-  which implements FileReaderServiceTemplate.
+- If no strategies are configured, **the IP‑API call is skipped entirely** 🚀
+- For local development, IP validations are disabled by default.
+- To replace the IP‑API provider, simply implement `IpDetailsRetrievable`.
+- To add new IP rules, create a new validator implementing `Validatable`.
 
-#### File Validation Rules
+---
 
-Each line must contain **7 pipe-delimited columns**:
+## 📄 File Validation
 
-| Column | Name         | Validator |
-|------|--------------|-----------|
-| 0 | UUID | UUIDValidator |
+- Enable or disable file validation using:
+
+```properties
+feature.flag.file.validation.enabled=true
+```
+
+- Validation rules are defined in the `TransportFileValidator` enum.
+- Output structure is controlled by `TransportFileReaderService`.
+- To support new file types, extend `FileReaderServiceTemplate`.
+
+### 📑 File Validation Rules
+
+Each line must contain **7 pipe (`|`)‑delimited columns**:
+
+| Column | Name        | Rule |
+|------|-------------|------|
+| 0 | UUID | Valid UUID |
 | 1 | ID | Regex pattern |
-| 2 | Name | Not empty, < 100 |
-| 3 | Likes | Not empty, < 100 |
-| 4 | Transport | Not empty, < 100 |
+| 2 | Name | Not empty, < 100 chars |
+| 3 | Likes | Not empty, < 100 chars |
+| 4 | Transport | Not empty, < 100 chars |
 | 5 | Avg Speed | Double |
 | 6 | Max Speed | Double |
 
-Validation stops at the **first failing rule per line**.
+📌 Validation stops at the **first failing rule per line**.
 
-- ID field regex is "^(\\d+)X\\1D\\d+$" .
-- Max file size 1MB.
-- No validations for non-ISO-8 characters applied for the sake of simplicity.
+Additional notes:
 
-## Testing
+- ID regex: `^(\d+)X\1D\d+$`
+- Max file size: **1MB**
+- Non‑ASCII characters are not validated (by design).
+
+---
+
+## 🧪 Testing
 
 ### Unit Tests
 
@@ -163,30 +182,36 @@ Validation stops at the **first failing rule per line**.
 
 ### Integration Tests
 
-- Full API flow
+- End‑to‑end API flow
 - File validation scenarios
 - IP validation scenarios
-- WireMock-based IP API simulation
+- WireMock‑based IP‑API simulation 🧰
 
-Run tests:
+Run all tests:
 
 ```bash
 mvn test
 ```
 
-## Assumptions
+---
 
-- If empty Country or Isp are returned from the IP-API client, this will not be considered a blocker, and validations
-  will pass.
+## 🤔 Assumptions
 
-## Room for Improvement
+- Empty **country** or **ISP** values returned from IP‑API are *not* considered blockers.
+- The system favors fast‑fail validation over collecting all possible errors.
 
-- More wiremock tests could be added for different exception case combinations
-- The app stops processing the file as soon as a invalid record is found. This helps thread and memory economy, since
-  unnecessary resources are not consumed for a possibly unlimited number of problematic records in the file. However,
-  this may not be desireable from UX standpoint.
-- No containerization included.
-- Execution time is logged in the db, tough more precise chronographs may also be considered.
-- This app supports delimited text files. Different file types such as CSV will require further abstractions.
-- No profiles such as dev, uat or PROD are specified for the sake of simplicity.
-- Retry mechanism for the client can be made parametric (avoided for the sake of simplicity).
+---
+
+## 🔧 Room for Improvement
+
+- More WireMock scenarios for edge cases
+- Optional accumulation of all validation errors (UX improvement)
+- Docker / container support 🐳
+- More precise execution timing metrics
+- Support for additional file formats (CSV, JSON, etc.)
+- Environment‑specific profiles (dev / uat / prod)
+- Configurable retry strategy for external clients
+
+---
+
+Made with ☕, Spring Boot, and a bit of validation magic ✨
