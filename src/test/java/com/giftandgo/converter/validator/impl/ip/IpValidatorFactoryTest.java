@@ -25,20 +25,15 @@ class IpValidatorFactoryTest {
         validatorB = mockValidator("B", 20);
         validatorC = mockValidator("C", 10);
 
-        factory = new IpValidatorFactory(
-                List.of(validatorA, validatorB, validatorC), null
-        );
+        factory = new IpValidatorFactory(List.of(validatorA, validatorB, validatorC), null);
     }
 
     @Test
     void shouldReturnOnlyValidatorsMatchingStrategies() {
-        // given
         ReflectionTestUtils.setField(factory, "strategies", List.of("A", "C"));
 
-        // when
         List<Validatable<IpDetails>> result = factory.getValidators();
 
-        // then
         assertEquals(2, result.size());
         assertTrue(result.contains(validatorA));
         assertTrue(result.contains(validatorC));
@@ -47,13 +42,10 @@ class IpValidatorFactoryTest {
 
     @Test
     void shouldSortValidatorsByPriorityAscending() {
-        // given
         ReflectionTestUtils.setField(factory, "strategies", List.of("A", "B", "C"));
 
-        // when
         List<Validatable<IpDetails>> result = factory.getValidators();
 
-        // then
         assertEquals(validatorB, result.get(2)); // priority 20
         assertEquals(validatorC, result.get(1)); // priority 10
         assertEquals(validatorA, result.get(0)); // priority 5
@@ -61,26 +53,20 @@ class IpValidatorFactoryTest {
 
     @Test
     void shouldReturnEmptyListWhenNoStrategiesConfigured() {
-        // given
         ReflectionTestUtils.setField(factory, "strategies", List.of());
 
-        // when
         List<Validatable<IpDetails>> result = factory.getValidators();
 
-        // then
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
 
     @Test
     void shouldReturnEmptyListWhenNoValidatorsMatchStrategies() {
-        // given
         ReflectionTestUtils.setField(factory, "strategies", List.of("X", "Y"));
 
-        // when
         List<Validatable<IpDetails>> result = factory.getValidators();
 
-        // then
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }

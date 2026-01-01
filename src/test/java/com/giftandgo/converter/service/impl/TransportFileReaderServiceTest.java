@@ -30,19 +30,13 @@ class TransportFileReaderServiceTest {
 
     @Test
     void shouldValidateAndMapSuccessfully() {
-        Mockito.when(validatorFactory.getValidators())
-                .thenReturn(List.of());
+        Mockito.when(validatorFactory.getValidators()).thenReturn(List.of());
 
-        List<String[]> lines =
-                java.util.Collections.singletonList(
-                        new String[]{"id", "x", "CAR", "y", "BIKE", "z", "120.5"}
-                );
-
+        List<String[]> lines = java.util.Collections.singletonList(new String[]{"id", "x", "CAR", "y", "BIKE", "z", "120.5"});
 
         assertDoesNotThrow(() -> service.validateContent(lines));
 
-        TransportOutcomeContent mapped =
-                service.getLineToOutputMapper(lines.get(0));
+        TransportOutcomeContent mapped = service.getLineToOutputMapper(lines.get(0));
 
         assertEquals("CAR", mapped.name());
         assertEquals("BIKE", mapped.transport());
@@ -55,27 +49,15 @@ class TransportFileReaderServiceTest {
 
     @Test
     void shouldThrowWhenValidatorFails() {
-        TransportFileValidator failingValidator =
-                Mockito.mock(TransportFileValidator.class);
-
+        TransportFileValidator failingValidator = Mockito.mock(TransportFileValidator.class);
         Mockito.when(failingValidator.getValidationPriority()).thenReturn(1);
         Mockito.when(failingValidator.getAssociatedColumn()).thenReturn(0);
         Mockito.when(failingValidator.getColumnName()).thenReturn("UUID");
-        Mockito.when(failingValidator.getValidator())
-                .thenReturn((content, col) -> false);
+        Mockito.when(failingValidator.getValidator()).thenReturn((content, col) -> false);
+        Mockito.when(validatorFactory.getValidators()).thenReturn(List.of(failingValidator));
+        List<String[]> lines = java.util.Collections.singletonList(new String[]{"bad"});
 
-        Mockito.when(validatorFactory.getValidators())
-                .thenReturn(List.of(failingValidator));
-
-        List<String[]> lines =
-                java.util.Collections.singletonList(
-                        new String[]{"bad"}
-                );
-
-        ConverterRuntimeException ex = assertThrows(
-                ConverterRuntimeException.class,
-                () -> service.validateContent(lines)
-        );
+        ConverterRuntimeException ex = assertThrows(ConverterRuntimeException.class, () -> service.validateContent(lines));
 
         assertEquals(INCORRECT_FILE_FORMAT, ex.getErrorCode());
     }
@@ -88,28 +70,16 @@ class TransportFileReaderServiceTest {
     void shouldApplyValidatorsInPriorityOrder() {
         TransportFileValidator highPriority = Mockito.mock(TransportFileValidator.class);
         TransportFileValidator lowPriority = Mockito.mock(TransportFileValidator.class);
-
         Mockito.when(lowPriority.getValidationPriority()).thenReturn(5);
         Mockito.when(highPriority.getValidationPriority()).thenReturn(1);
-
         Mockito.when(highPriority.getAssociatedColumn()).thenReturn(0);
         Mockito.when(highPriority.getColumnName()).thenReturn("UUID");
-        Mockito.when(highPriority.getValidator())
-                .thenReturn((c, i) -> false);
+        Mockito.when(highPriority.getValidator()).thenReturn((c, i) -> false);
+        Mockito.when(validatorFactory.getValidators()).thenReturn(List.of(lowPriority, highPriority));
 
-        Mockito.when(validatorFactory.getValidators())
-                .thenReturn(List.of(lowPriority, highPriority));
+        List<String[]> lines = java.util.Collections.singletonList(new String[]{"x"});
 
-        List<String[]> lines =
-                java.util.Collections.singletonList(
-                        new String[]{"x"}
-                );
-
-        ConverterRuntimeException ex = assertThrows(
-                ConverterRuntimeException.class,
-                () -> service.validateContent(lines)
-        );
-
+        ConverterRuntimeException ex = assertThrows(ConverterRuntimeException.class, () -> service.validateContent(lines));
         assertEquals(INCORRECT_FILE_FORMAT, ex.getErrorCode());
     }
 }

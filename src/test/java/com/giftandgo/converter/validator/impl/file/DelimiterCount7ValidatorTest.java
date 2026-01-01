@@ -11,66 +11,44 @@ class DelimiterCount7ValidatorTest {
 
     @Test
     void shouldReturnTrueWhenContentHasExactlySevenElements() {
-        // given
-        String[] content = {
-                "a", "b", "c", "d", "e", "f", "g"
-        };
+        String[] content = {"a", "b", "c", "d", "e", "f", "g"};
 
-        // when
         boolean result = validator.test(content, 0);
 
-        // then
         assertTrue(result);
     }
 
     @Test
     void shouldReturnFalseWhenContentHasLessThanSevenElements() {
-        // given
-        String[] content = {
-                "a", "b", "c"
-        };
+        String[] content = {"a", "b", "c"};
 
-        // when
         boolean result = validator.test(content, 0);
 
-        // then
         assertFalse(result);
     }
 
     @Test
     void shouldReturnFalseWhenContentHasMoreThanSevenElements() {
-        // given
-        String[] content = {
-                "a", "b", "c", "d", "e", "f", "g", "h"
-        };
+        String[] content = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
-        // when
         boolean result = validator.test(content, 0);
 
-        // then
         assertFalse(result);
     }
 
     @Test
     void shouldReturnFalseWhenContentIsNull() {
-        // when
         boolean result = validator.test(null, 0);
 
-        // then
         assertFalse(result);
     }
 
     @Test
     void associatedColumnIsIgnoredButDoesNotBreakValidation() {
-        // given
-        String[] content = {
-                "a", "b", "c", "d", "e", "f", "g"
-        };
+        String[] content = {"a", "b", "c", "d", "e", "f", "g"};
 
-        // when
         boolean result = validator.test(content, 999);
 
-        // then
         assertTrue(result);
     }
 }

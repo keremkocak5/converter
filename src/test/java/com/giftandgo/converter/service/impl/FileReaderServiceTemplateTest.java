@@ -28,18 +28,10 @@ class FileReaderServiceTemplateTest {
     void shouldReadValidateAndReturnOutcomeFile() throws Exception {
         MultipartFile file = mock(MultipartFile.class);
         when(file.getInputStream()).thenReturn(new ByteArrayInputStream("data".getBytes()));
-
-        List<String[]> lines = List.of(
-                new String[]{"a", "b"},
-                new String[]{"c", "d"}
-        );
-
+        List<String[]> lines = List.of(new String[]{"a", "b"}, new String[]{"c", "d"});
         try (MockedStatic<FileReadWriteUtil> util = mockStatic(FileReadWriteUtil.class)) {
-            util.when(() -> FileReadWriteUtil.read(any(InputStream.class), any()))
-                    .thenReturn(lines);
-
-            util.when(() -> FileReadWriteUtil.write(any(), any()))
-                    .thenAnswer(inv -> null);
+            util.when(() -> FileReadWriteUtil.read(any(InputStream.class), any())).thenReturn(lines);
+            util.when(() -> FileReadWriteUtil.write(any(), any())).thenAnswer(inv -> null);
 
             OutcomeFile result = service.getValidatedFileContent(file);
 
@@ -53,12 +45,9 @@ class FileReaderServiceTemplateTest {
     void shouldThrowWhenReadFails() throws Exception {
         MultipartFile file = mock(MultipartFile.class);
         when(file.getInputStream()).thenThrow(new RuntimeException());
-
         try (MockedStatic<FileReadWriteUtil> util = mockStatic(FileReadWriteUtil.class)) {
-            ConverterRuntimeException ex = assertThrows(
-                    ConverterRuntimeException.class,
-                    () -> service.getValidatedFileContent(file)
-            );
+
+            ConverterRuntimeException ex = assertThrows(ConverterRuntimeException.class, () -> service.getValidatedFileContent(file));
 
             assertEquals(ErrorCode.CANNOT_READ_FILE, ex.getErrorCode());
         }
@@ -68,23 +57,15 @@ class FileReaderServiceTemplateTest {
     void shouldThrowWhenValidationFails() throws Exception {
         MultipartFile file = mock(MultipartFile.class);
         when(file.getInputStream()).thenReturn(new ByteArrayInputStream("data".getBytes()));
-
-
-        List<String[]> lines = List.of(
-                new String[]{"INVALID"},
-                new String[]{"INVALID"}
-        );
+        List<String[]> lines = List.of(new String[]{"INVALID"}, new String[]{"INVALID"});
 
         try (MockedStatic<FileReadWriteUtil> util = mockStatic(FileReadWriteUtil.class)) {
-            util.when(() -> FileReadWriteUtil.read(any(), any()))
-                    .thenReturn(lines);
+            util.when(() -> FileReadWriteUtil.read(any(), any())).thenReturn(lines);
 
-            ConverterRuntimeException ex = assertThrows(
-                    ConverterRuntimeException.class,
-                    () -> service.getValidatedFileContent(file)
-            );
+            ConverterRuntimeException ex = assertThrows(ConverterRuntimeException.class, () -> service.getValidatedFileContent(file));
 
-            assertEquals(ErrorCode.CANNOT_READ_FILE, ex.getErrorCode());
+            assertEquals(ErrorCode.INCORRECT_FILE_FORMAT, ex.getErrorCode());
+            assertEquals("bad!! not valid at line 1", ex.getMessage());
         }
     }
 
@@ -92,22 +73,14 @@ class FileReaderServiceTemplateTest {
     void shouldThrowWhenParsingFails() throws Exception {
         MultipartFile file = mock(MultipartFile.class);
         when(file.getInputStream()).thenReturn(new ByteArrayInputStream("data".getBytes()));
-
-        List<String[]> lines = List.of(
-                new String[]{"OK"},
-                new String[]{"BOOM"}
-        );
-
+        List<String[]> lines = List.of(new String[]{"OK"}, new String[]{"BOOM"});
         try (MockedStatic<FileReadWriteUtil> util = mockStatic(FileReadWriteUtil.class)) {
-            util.when(() -> FileReadWriteUtil.read(any(), any()))
-                    .thenReturn(lines);
+            util.when(() -> FileReadWriteUtil.read(any(), any())).thenReturn(lines);
 
-            ConverterRuntimeException ex = assertThrows(
-                    ConverterRuntimeException.class,
-                    () -> service.getValidatedFileContent(file)
-            );
+            ConverterRuntimeException ex = assertThrows(ConverterRuntimeException.class, () -> service.getValidatedFileContent(file));
 
-            assertEquals(ErrorCode.CANNOT_READ_FILE, ex.getErrorCode());
+            assertEquals(ErrorCode.INCORRECT_FILE_FORMAT, ex.getErrorCode());
+            assertEquals("bad!! not valid at line 1", ex.getMessage());
         }
     }
 
@@ -120,7 +93,7 @@ class FileReaderServiceTemplateTest {
         @Override
         void validateContent(List<String[]> lines) {
             if (lines.stream().anyMatch(l -> l.length < 2)) {
-                throw new ConverterRuntimeException(ErrorCode.CANNOT_READ_FILE);
+                throw new ConverterRuntimeException(ErrorCode.INCORRECT_FILE_FORMAT, "bad!!", 1);
             }
         }
 

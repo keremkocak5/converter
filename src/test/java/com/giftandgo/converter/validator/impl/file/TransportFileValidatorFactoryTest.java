@@ -20,50 +20,35 @@ class TransportFileValidatorFactoryTest {
 
     @Test
     void shouldReturnEmptyListWhenValidationDisabled() {
-        // given
         ReflectionTestUtils.setField(factory, "validationEnabled", false);
 
-        // when
         List<TransportFileValidator> validators = factory.getValidators();
 
-        // then
         assertNotNull(validators);
         assertTrue(validators.isEmpty());
     }
 
     @Test
     void shouldReturnAllValidatorsWhenValidationEnabled() {
-        // given
         ReflectionTestUtils.setField(factory, "validationEnabled", true);
 
-        // when
         List<TransportFileValidator> validators = factory.getValidators();
 
-        // then
         assertNotNull(validators);
-        assertEquals(
-                TransportFileValidator.values().length,
-                validators.size()
-        );
+        assertEquals(TransportFileValidator.values().length, validators.size());
     }
 
     @Test
     void shouldReturnValidatorsSortedByPriorityAscending() {
-        // given
         ReflectionTestUtils.setField(factory, "validationEnabled", true);
 
-        // when
         List<TransportFileValidator> validators = factory.getValidators();
 
-        // then
         for (int i = 0; i < validators.size() - 1; i++) {
             int currentPriority = validators.get(i).getValidationPriority();
             int nextPriority = validators.get(i + 1).getValidationPriority();
 
-            assertTrue(
-                    currentPriority <= nextPriority,
-                    "Validators are not sorted by priority ascending"
-            );
+            assertTrue(currentPriority <= nextPriority, "Validators are not sorted by priority ascending");
         }
     }
 }
